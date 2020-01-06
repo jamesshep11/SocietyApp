@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.geometry.Insets?>
+
+<HBox fx:id="HBoxRoot" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="607.0" prefWidth="340.0" spacing="10.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="AddMember">
+   <children>
+      <VBox prefHeight="468.0" prefWidth="126.0" spacing="11.0">
+         <children>
+            <Label id="lblMemberDetails" text="Member Details">
+               <font>
+                  <Font name="System Bold" size="12.0" />
+               </font>
+            </Label>
+            <Label id="lblID" text="ID Number" />
+            <Label id="lblName" text="Name" />
+            <Label id="lblSurname" text="Surname" />
+            <Label id="lblGender" text="Gender" />
+            <Label id="lblStudent" text="Student" />
+            <Label text="Student Number" />
+            <Label text="Ballroom Level" />
+            <Label text="Latin Level" />
+            <Label text="Paid" />
+            <Label text="Competitive" />
+            <Label text="Email" />
+            <Label text="Phone" />
+            <Label text="Street" />
+            <Label text="Suburb" />
+            <Label text="Diet Requirments" />
+            <Label text="Medical Conditions" />
+            <Label text="Disabilities" />
+            <Button id="btnSave" fx:id="btnSave" mnemonicParsing="false" onAction="#btnSaveClicked" prefHeight="25.0" prefWidth="75.0" text="Save" />
+         </children>
+      </VBox>
+      <VBox prefHeight="468.0" prefWidth="157.0" spacing="5.0">
+         <children>
+            <TextField id="txtID" fx:id="txtID" />
+            <TextField id="txtName" fx:id="txtName" />
+            <TextField id="txtSurname" fx:id="txtSurname" />
+            <ComboBox id="cbGender" fx:id="cbGender" prefWidth="150.0" />
+            <CheckBox id="chbStudent" fx:id="chbStudent" mnemonicParsing="false" />
+            <TextField id="txtStudentNumber" fx:id="txtStudentNumber" />
+            <ComboBox id="cbBLevel" fx:id="cbBLevel" prefWidth="150.0" />
+            <ComboBox id="cbLLevel" fx:id="cbLLevel" prefWidth="150.0" />
+            <CheckBox id="chbPaid" fx:id="chbPaid" mnemonicParsing="false" />
+            <CheckBox id="chbCompetitive" fx:id="chbCompetitive" mnemonicParsing="false" />
+            <TextField id="txtEmail" fx:id="txtEmail" />
+            <TextField id="txtPhone" fx:id="txtPhone" />
+            <TextField id="txtStreet" fx:id="txtStreet" />
+            <TextField id="txtSuburb" fx:id="txtSuburb" />
+            <TextField id="txtDiet" fx:id="txtDiet" />
+            <TextField id="txtMedical" fx:id="txtMedical" />
+            <TextField id="txtDisabilities" fx:id="txtDisabilities" />
+            <Button id="btnSelectImage" fx:id="btnSelectimage" mnemonicParsing="false" onAction="#btnSelectImageClicked" text="Select Image" />
+            <TextField id="txtImage" fx:id="edtImage" />
+         </children>
+         <HBox.margin>
+            <Insets top="20.0" />
+         </HBox.margin>
+      </VBox>
+   </children>
+   <padding>
+      <Insets bottom="15.0" left="20.0" right="15.0" top="15.0" />
+   </padding>
+</HBox>
