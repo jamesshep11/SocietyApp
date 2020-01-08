@@ -90,8 +90,8 @@
                     </FXCollections>
                 </items>
             </ComboBox>
-            <CheckBox id="chbPaid" fx:id="chbPaid" mnemonicParsing="false" selected="true" />
-            <CheckBox id="chbCompetitive" fx:id="chbCompetitive" mnemonicParsing="false" selected="true" />
+            <CheckBox id="chbPaid" fx:id="chbPaid" mnemonicParsing="false" />
+            <CheckBox id="chbCompetitive" fx:id="chbCompetitive" mnemonicParsing="false" />
             <TextField id="txtEmail" fx:id="txtEmail" text="NA" />
             <TextField id="txtPhone" fx:id="txtPhone" text="NA" />
             <TextField id="txtStreet" fx:id="txtStreet" text="NA" />

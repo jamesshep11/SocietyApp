@@ -86,7 +86,7 @@
     </Member>
     <Member>
         <MemberInfo>
-            <ID>NA</ID>
+            <ID>1</ID>
             <Name>Aithne</Name>
             <Surname>Baartman</Surname>
             <Gender>Female</Gender>
@@ -170,7 +170,7 @@
     </Member>
     <Member>
         <MemberInfo>
-            <ID>1</ID>
+            <ID>2</ID>
             <Name>Amie</Name>
             <Surname>Deasy</Surname>
             <Gender>Female</Gender>
@@ -319,7 +319,7 @@
         <MemberInfo>
             <ID>221067620</ID>
             <Name>Armand</Name>
-            <Surname>Hager</Surname>
+            <Surname>Hagen</Surname>
             <Gender>Male</Gender>
             <Student>true</Student>
             <StudentNum>221067620</StudentNum>
@@ -464,7 +464,7 @@
     </Member>
     <Member>
         <MemberInfo>
-            <ID>NA</ID>
+            <ID>3</ID>
             <Name>Bianca</Name>
             <Surname>Schrader</Surname>
             <Gender>Female</Gender>
@@ -569,7 +569,7 @@
     </Member>
     <Member>
         <MemberInfo>
-            <ID>NA</ID>
+            <ID>4</ID>
             <Name>Buntu</Name>
             <Surname>Klaas</Surname>
             <Gender>Male</Gender>
@@ -653,7 +653,7 @@
     </Member>
     <Member>
         <MemberInfo>
-            <ID>NA</ID>
+            <ID>5</ID>
             <Name>Chante</Name>
             <Surname>Venter</Surname>
             <Gender>Female</Gender>
@@ -739,7 +739,7 @@
         <MemberInfo>
             <ID>8310135116080</ID>
             <Name>Clayton</Name>
-            <Surname>Weatheralll-Thomase</Surname>
+            <Surname>Weatheralll-Thomas</Surname>
             <Gender>Male</Gender>
             <Student>false</Student>
             <StudentNum>220075727</StudentNum>
@@ -968,7 +968,7 @@
     </Member>
     <Member>
         <MemberInfo>
-            <ID>NA</ID>
+            <ID>6</ID>
             <Name>Ethan</Name>
             <Surname>Kleinlugtenbelt</Surname>
             <Gender>Male</Gender>
@@ -1136,7 +1136,7 @@
     </Member>
     <Member>
         <MemberInfo>
-            <ID>NA</ID>
+            <ID>7</ID>
             <Name>Idelette</Name>
             <Surname>Nel</Surname>
             <Gender>Female</Gender>
@@ -1306,7 +1306,7 @@
         <MemberInfo>
             <ID>9605100245080</ID>
             <Name>Jessie</Name>
-            <Surname>O'Brien</Surname>
+            <Surname>OBrien</Surname>
             <Gender>Female</Gender>
             <Student>false</Student>
             <StudentNum>NA</StudentNum>
@@ -1724,7 +1724,7 @@
     </Member>
     <Member>
         <MemberInfo>
-            <ID>NA</ID>
+            <ID>8</ID>
             <Name>Louis</Name>
             <Surname>Swart</Surname>
             <Gender>Male</Gender>
@@ -1808,7 +1808,7 @@
     </Member>
     <Member>
         <MemberInfo>
-            <ID>NA</ID>
+            <ID>9</ID>
             <Name>Mark</Name>
             <Surname>Phelps</Surname>
             <Gender>Male</Gender>
@@ -1913,7 +1913,7 @@
     </Member>
     <Member>
         <MemberInfo>
-            <ID>NA</ID>
+            <ID>10</ID>
             <Name>Miche</Name>
             <Surname>Taai</Surname>
             <Gender>Female</Gender>
@@ -2123,7 +2123,7 @@
     </Member>
     <Member>
         <MemberInfo>
-            <ID>NA</ID>
+            <ID>11</ID>
             <Name>PC</Name>
             <Surname>van Rooyen</Surname>
             <Gender>Male</Gender>

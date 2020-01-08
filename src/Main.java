@@ -26,9 +26,13 @@ import javax.xml.xpath.XPathFactory;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.lang.reflect.Array;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class Main extends Application {
+
+    private static DatabaseConnection db;
 
     public static void main(String[] args) {
         launch(args);
@@ -36,6 +40,8 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        db = new DatabaseConnection();
+
         FXMLLoader loader = new FXMLLoader(getClass().getResource("Main.fxml"));
         Parent root = loader.load();
         Scene scene = new Scene(root);
@@ -136,6 +142,48 @@ public class Main extends Application {
             Member mem = lvMembers.getSelectionModel().getSelectedItem();
             mem.setImage(new Image(file.toURI().toString()));
         }
+    }
+
+    public void btnSaveToDbClicked(){
+        for (Member member : observableMembers) {
+            //region Get data from member
+            String ID = member.getId();
+            String Name = member.getName();
+            String Surname = member.getSurname();
+            String Gender = member.getGender();
+            Boolean Student = member.isStudent();
+            String StudentNum = member.getStudentNumber();
+            String bLevel = member.getbLevel();
+            String lLevel = member.getlLevel();
+            Boolean Paid = member.isPaid();
+            Boolean Competitive = member.isCompetitive();
+            String Email = member.getEmail();
+            String Phone = member.getPhone();
+            String Street = member.getStreet();
+            String Suburb = member.getSuburb();
+            String Diet = member.getDietary();
+            String Medical = member.getMedical();
+            String Disabilities = member.getDisabilities();
+            String Image = "/resources/" + Name + " " + Surname + ".jpg";
+            //endregion
+
+            String sql = "SELECT * FROM Members WHERE ID = '" + ID + "'";
+            ResultSet rs = db.runSQL(sql);
+
+            try {
+                if (!rs.next()) {
+                    sql = String.format("INSERT INTO Members (ID, Name, Surname, Gender, Student, StudentNum, bLevel, lLevel, Paid, Competitive, Email, Phone, Street, Suburb, Diet, Medical, Disabilities, Image) " +
+                                    "VALUES ('%s', '%s', '%s', '%s', %b, '%s', '%s', '%s', %b, %b, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')",
+                            ID, Name, Surname, Gender, Student, StudentNum, bLevel, lLevel, Paid, Competitive, Email, Phone, Street, Suburb, Diet, Medical, Disabilities, Image);
+
+                    db.runSQL(sql);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        System.out.println("Done. DB ready");
     }
 
     //endregion
@@ -444,7 +492,7 @@ public class Main extends Application {
         System.out.println("[]\tNew Member.");
 
         AddMember addMember = new AddMember();
-        addMember.loadAddMember();
+        addMember.loadAddMember((Stage)txtID.getScene().getWindow());
         Member newMember = addMember.getNewMember();
 
         if(newMember != null)

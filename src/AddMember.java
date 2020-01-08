@@ -23,12 +23,12 @@ public class AddMember
     //endregion
 
     private static Stage stage;
-    private Member newMember = null;
+    private static Member newMember = null;
 
     public AddMember() {
     }
 
-    public void loadAddMember(){
+    public void loadAddMember(Stage parent){
         FXMLLoader loader = new FXMLLoader(getClass().getResource("AddMember.fxml"));
         Parent root = null;
         try {
@@ -41,6 +41,7 @@ public class AddMember
         stage = new Stage();
         stage.setTitle("Add Member");
         stage.setScene(scene);
+        stage.initOwner(parent);
         stage.initStyle(StageStyle.UTILITY);
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.showAndWait();
@@ -84,4 +85,5 @@ public class AddMember
     public Member getNewMember(){
         return newMember;
     }
+    
 }
