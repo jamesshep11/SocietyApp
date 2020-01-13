@@ -1,4 +1,3 @@
-import com.sun.scenario.Settings;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;

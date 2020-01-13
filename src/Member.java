@@ -1,6 +1,4 @@
 import javafx.beans.property.*;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.scene.image.Image;
 
 public class Member {
@@ -62,11 +60,6 @@ public class Member {
         return id;
     }
 
-    public void setId(String id)
-    {
-        this.id.set(id);
-    }
-
     public String getName()
     {
         return name.get();
@@ -75,11 +68,6 @@ public class Member {
     public StringProperty nameProperty()
     {
         return name;
-    }
-
-    public void setName(String name)
-    {
-        this.name.set(name);
     }
 
     public String getSurname()
@@ -92,11 +80,6 @@ public class Member {
         return surname;
     }
 
-    public void setSurname(String surname)
-    {
-        this.surname.set(surname);
-    }
-
     public String getGender()
     {
         return gender.get();
@@ -105,11 +88,6 @@ public class Member {
     public StringProperty genderProperty()
     {
         return gender;
-    }
-
-    public void setGender(String gender)
-    {
-        this.gender.set(gender);
     }
 
     public Boolean isStudent()
@@ -122,11 +100,6 @@ public class Member {
         return student;
     }
 
-    public void setStudent(boolean student)
-    {
-        this.student.set(student);
-    }
-
     public String getStudentNumber()
     {
         return studentNumber.get();
@@ -135,11 +108,6 @@ public class Member {
     public StringProperty studentNumberProperty()
     {
         return studentNumber;
-    }
-
-    public void setStudentNumber(String studentNumber)
-    {
-        this.studentNumber.set(studentNumber);
     }
 
     public String getEmail()
@@ -152,11 +120,6 @@ public class Member {
         return email;
     }
 
-    public void setEmail(String email)
-    {
-        this.email.set(email);
-    }
-
     public String getPhone()
     {
         return phone.get();
@@ -165,11 +128,6 @@ public class Member {
     public StringProperty phoneProperty()
     {
         return phone;
-    }
-
-    public void setPhone(String phone)
-    {
-        this.phone.set(phone);
     }
 
     public String getStreet()
@@ -182,11 +140,6 @@ public class Member {
         return street;
     }
 
-    public void setStreet(String street)
-    {
-        this.street.set(street);
-    }
-
     public String getSuburb()
     {
         return suburb.get();
@@ -195,11 +148,6 @@ public class Member {
     public StringProperty suburbProperty()
     {
         return suburb;
-    }
-
-    public void setSuburb(String suburb)
-    {
-        this.suburb.set(suburb);
     }
 
     public String getbLevel()
@@ -212,11 +160,6 @@ public class Member {
         return bLevel;
     }
 
-    public void setbLevel(String bLevel)
-    {
-        this.bLevel.set(bLevel);
-    }
-
     public String getlLevel()
     {
         return lLevel.get();
@@ -225,11 +168,6 @@ public class Member {
     public StringProperty lLevelProperty()
     {
         return lLevel;
-    }
-
-    public void setlLevel(String lLevel)
-    {
-        this.lLevel.set(lLevel);
     }
 
     public Boolean isPaid()
@@ -242,11 +180,6 @@ public class Member {
         return paid;
     }
 
-    public void setPaid(boolean paid)
-    {
-        this.paid.set(paid);
-    }
-
     public Boolean isCompetitive()
     {
         return competitive.get();
@@ -255,11 +188,6 @@ public class Member {
     public BooleanProperty competitiveProperty()
     {
         return competitive;
-    }
-
-    public void setCompetitive(boolean competitive)
-    {
-        this.competitive.set(competitive);
     }
 
     public String getDietary()
@@ -272,11 +200,6 @@ public class Member {
         return dietary;
     }
 
-    public void setDietary(String dietary)
-    {
-        this.dietary.set(dietary);
-    }
-
     public String getMedical()
     {
         return medical.get();
@@ -287,11 +210,6 @@ public class Member {
         return medical;
     }
 
-    public void setMedical(String medical)
-    {
-        this.medical.set(medical);
-    }
-
     public String getDisabilities()
     {
         return disabilities.get();
@@ -300,11 +218,6 @@ public class Member {
     public StringProperty disabilitiesProperty()
     {
         return disabilities;
-    }
-
-    public void setDisabilities(String disabilities)
-    {
-        this.disabilities.set(disabilities);
     }
 
     public Image getImage()

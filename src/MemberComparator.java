@@ -1,6 +1,6 @@
 import java.util.Comparator;
 
-public class MemberComparitor implements Comparator<Member>
+public class MemberComparator implements Comparator<Member>
 {
     @Override
     public int compare(Member mem1, Member mem2)

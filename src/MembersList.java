@@ -1,11 +1,7 @@
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.control.ListView;
 
-import javax.imageio.ImageIO;
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class MembersList
@@ -16,7 +12,7 @@ public class MembersList
     private ObservableList<Member> observableMembers = FXCollections.observableArrayList(memberArrayList);
     private ListView<Member> lvMembers;
 
-    public MembersList(ListView lvMembers) {
+    public MembersList(ListView<Member> lvMembers) {
         this.lvMembers = lvMembers;
     }
 
@@ -93,7 +89,7 @@ public class MembersList
     public void add(Member newMember) {
         newMembers.add(newMember);
         observableMembers.add(newMember);
-        observableMembers.sort(new MemberComparitor());
+        observableMembers.sort(new MemberComparator());
 
         lvMembers.getSelectionModel().select(newMember);
         lvMembers.scrollTo(newMember);

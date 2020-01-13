@@ -281,7 +281,12 @@ public class Main extends Application {
                 db.runSQL(sql);
 
                 File image = new File("./src//resources//" + ID + ".jpg");
-                image.delete();
+                if(!image.delete())
+                    try {
+                        throw new Exception("Image " + image.getName() + " not deleted");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
             }
 
             membersList.setRemovedMembers(new ArrayList<>());
