@@ -1,4 +1,6 @@
 import javafx.beans.property.*;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.image.Image;
 
 public class Member {
@@ -22,6 +24,7 @@ public class Member {
     private StringProperty disabilities = new SimpleStringProperty();
     private ObjectProperty<Image> image = new SimpleObjectProperty<>();
     //endregion
+    private Boolean changed;
 
     public Member(String id, String name, String surname, String gender, Boolean student, String studentNumber, String email, String phone, String street, String suburb, String bLevel, String lLevel, Boolean paid,Boolean competitive, String dietary, String medical, String disabilities, Image image)
     {
@@ -43,6 +46,9 @@ public class Member {
         this.medical.setValue(medical);
         this.disabilities.setValue(disabilities);
         this.image.setValue(image);
+
+        changed = false;
+        addBindings();
     }
 
     //region Getters and Setters
@@ -316,7 +322,36 @@ public class Member {
         this.image.set(image);
     }
 
+    public Boolean isChanged(){
+        return changed;
+    }
+
+    public void setChanged(Boolean changed){
+        this.changed = changed;
+    }
+
     //endregion
+
+    private void addBindings(){
+        id.addListener((observable, oldValue, newValue) -> changed = true);
+        name.addListener((observable, oldValue, newValue) -> changed = true);
+        surname.addListener((observable, oldValue, newValue) -> changed = true);
+        gender.addListener((observable, oldValue, newValue) -> changed = true);
+        student.addListener((observable, oldValue, newValue) -> changed = true);
+        studentNumber.addListener((observable, oldValue, newValue) -> changed = true);
+        email.addListener((observable, oldValue, newValue) -> changed = true);
+        phone.addListener((observable, oldValue, newValue) -> changed = true);
+        street.addListener((observable, oldValue, newValue) -> changed = true);
+        suburb.addListener((observable, oldValue, newValue) -> changed = true);
+        bLevel.addListener((observable, oldValue, newValue) -> changed = true);
+        lLevel.addListener((observable, oldValue, newValue) -> changed = true);
+        paid.addListener((observable, oldValue, newValue) -> changed = true);
+        competitive.addListener((observable, oldValue, newValue) -> changed = true);
+        dietary.addListener((observable, oldValue, newValue) -> changed = true);
+        medical.addListener((observable, oldValue, newValue) -> changed = true);
+        disabilities.addListener((observable, oldValue, newValue) -> changed = true);
+        image.addListener((observable, oldValue, newValue) -> changed = true);
+    }
 
     @Override
     public String toString() {

@@ -43,7 +43,7 @@
       </VBox>
       <VBox prefHeight="468.0" prefWidth="157.0" spacing="5.0">
          <children>
-            <TextField id="txtID" fx:id="txtID" text="NA" />
+            <TextField id="txtID" fx:id="txtID" text="1" />
             <TextField id="txtName" fx:id="txtName" text="NA" />
             <TextField id="txtSurname" fx:id="txtSurname" text="NA" />
             <ComboBox id="cbGender" fx:id="cbGender" prefWidth="150.0" value="Female">
@@ -100,7 +100,7 @@
             <TextField id="txtMedical" fx:id="txtMedical" text="NA" />
             <TextField id="txtDisabilities" fx:id="txtDisabilities" text="NA" />
             <Button id="btnSelectImage" fx:id="btnSelectimage" mnemonicParsing="false" onAction="#btnSelectImageClicked" text="Select Image" />
-            <TextField id="txtImage" fx:id="txtImage" text="file:/C:/Users/Visitor/Pictures/Saved%20Pictures/18893124_797568423750662_570687397780738901_n%20(2).jpg" />
+            <TextField id="txtImage" fx:id="txtImage" text="file:/C:/Users/Visitor/Documents/James/Ballroom/Chair/2020/SocietyApp/src/resources/7.jpg" />
          </children>
          <HBox.margin>
             <Insets top="20.0" />

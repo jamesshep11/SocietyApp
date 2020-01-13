@@ -40,7 +40,7 @@ public class DatabaseConnection {
         return rs;
     }
 
-    private void close() {
+    public void close() {
         try {
             if (st != null) {
                 st.close();

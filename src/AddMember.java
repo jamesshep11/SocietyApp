@@ -12,6 +12,8 @@ import javafx.stage.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class AddMember
 {
@@ -24,11 +26,14 @@ public class AddMember
 
     private static Stage stage;
     private static Member newMember = null;
+    private static DatabaseConnection db;
 
     public AddMember() {
     }
 
     public void loadAddMember(Stage parent){
+        db = new DatabaseConnection();
+
         FXMLLoader loader = new FXMLLoader(getClass().getResource("AddMember.fxml"));
         Parent root = null;
         try {
@@ -77,8 +82,20 @@ public class AddMember
         Image image = new Image(txtImage.getText());
         //endregion
 
+        String sql = "SELECT * FROM Members WHERE ID = '" + id + "';";
+        ResultSet rs = db.runSQL(sql);
+        try {
+            if (rs.next()) {
+                System.out.println("That ID already exists. Please enter a unique ID.");
+                return;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
         newMember = new Member(id, name, surname, gender, student, studentNumber, email, phone, street, suburb, bLevel, lLevel, paid, competitive, diet, medical, disabilities, image);
 
+        db.close();
         stage.hide();
     }
 

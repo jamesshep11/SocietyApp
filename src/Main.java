@@ -1,4 +1,3 @@
-import com.sun.javafx.collections.ObservableListWrapper;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -12,20 +11,10 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import org.w3c.dom.*;
-import org.w3c.dom.ls.DOMImplementationLS;
-import org.w3c.dom.ls.LSOutput;
-import org.w3c.dom.ls.LSSerializer;
 
 import javax.imageio.ImageIO;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathFactory;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.lang.reflect.Array;
+import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -33,6 +22,18 @@ import java.util.ArrayList;
 public class Main extends Application {
 
     private static DatabaseConnection db;
+    private static MembersList membersList;
+
+    //region reference to UI components
+    @FXML
+    private TextField txtID, txtSurname, txtName, txtStudentNumber, txtEmail, txtPhone, txtStreet, txtSuburb, txtDiet, txtMedical, txtDisabilities, txtSearch;
+    @FXML private ComboBox cbGender, cbBLevel, cbLLevel;
+    @FXML private CheckBox chbStudent, chbPaid, chbCompetitive;
+    @FXML private Button btnLoad, btnSave, btnMemberAdd, btnMemberDelete, btnEditImage, btnSearch;
+    @FXML private Label lblMemberCount;
+    @FXML private ListView<Member> lvMembers;
+    @FXML private ImageView imgMember;
+    //endregion
 
     public static void main(String[] args) {
         launch(args);
@@ -51,145 +52,39 @@ public class Main extends Application {
         primaryStage.show();
     }
 
-    //region reference to UI components
-    @FXML
-    private TextField txtID, txtSurname, txtName, txtStudentNumber, txtEmail, txtPhone, txtStreet, txtSuburb, txtDiet, txtMedical, txtDisabilities, txtSearch;
-    @FXML private ComboBox cbGender, cbBLevel, cbLLevel;
-    @FXML private CheckBox chbStudent, chbPaid, chbCompetitive;
-    @FXML private Button btnLoad, btnSave, btnMemberAdd, btnMemberDelete, btnEditImage, btnSearch;
-    @FXML private Label lblMemberCount;
-    @FXML private ListView<Member> lvMembers;
-    @FXML private ImageView imgMember;
-    //endregion
+    private void readMembersFromDB() throws SQLException {
+        String sql = "SELECT * FROM Members";
+        ResultSet rs = db.runSQL(sql);
 
-    private static ArrayList<Member> memberArrayList = new ArrayList<>();
-    private static ObservableList<Member> observableMembers = FXCollections.observableArrayList(memberArrayList);
+        while (rs.next()){
+            String id = rs.getString("ID");
+            String name = rs.getString("Name");
+            String surname = rs.getString("Surname");
+            String gender = rs.getString("Gender");
+            Boolean student = rs.getBoolean("Student");
+            String studentNum = rs.getString("StudentNum");
+            String bLevel = rs.getString("bLevel");
+            String lLevel = rs.getString("lLevel");
+            Boolean paid = rs.getBoolean("Paid");
+            Boolean competitive = rs.getBoolean("Competitive");
+            String email = rs.getString("Email");
+            String phone = rs.getString("Phone");
+            String street = rs.getString("Street");
+            String suburb = rs.getString("Suburb");
+            String diet = rs.getString("Diet");
+            String medical = rs.getString("Medical");
+            String disabilities = rs.getString("Disabilities");
+            Image image = new Image(this.getClass().getResourceAsStream(rs.getString("Image")));
 
-    //region UI Methods
-    public void btnLoadClicked(){
-        try {
-            readMember();
-            btnLoad.setDisable(true);
-            //region Enable Components
-            btnSave.setDisable(false);
-            btnMemberAdd.setDisable(false);
-            btnMemberDelete.setDisable(false);
-            btnEditImage.setDisable(false);
+            Member newMember = new Member(id, name, surname, gender, student, studentNum, email, phone, street, suburb, bLevel, lLevel, paid, competitive, diet, medical, disabilities, image);
 
-            txtName.setDisable(false);
-            txtStudentNumber.setDisable(false);
-            txtSurname.setDisable(false);
-            txtID.setDisable(false);
-            txtSurname.setDisable(false);
-            txtName.setDisable(false);
-            txtStudentNumber.setDisable(false);
-            txtEmail.setDisable(false);
-            txtPhone.setDisable(false);
-            txtStreet.setDisable(false);
-            txtSuburb.setDisable(false);
-            txtDiet.setDisable(false);
-            txtMedical.setDisable(false);
-            txtDisabilities.setDisable(false);
-
-            txtSearch.setDisable(false);
-            btnSearch.setDisable(false);
-
-            cbGender.setDisable(false);
-            ObservableList<String> genders = FXCollections.observableArrayList("Male","Female");
-            cbGender.setItems(genders);
-            cbBLevel.setDisable(false);
-            cbLLevel.setDisable(false);
-            ObservableList<String> levels = FXCollections.observableArrayList("Basics","Beginner", "Intermediate", "Advanced", "PreBronze", "Bronze", "Silver", "Gold", "Novice", "PreChamp", "Champ");
-            cbBLevel.setItems(levels);
-            cbLLevel.setItems(levels);
-
-            chbStudent.setDisable(false);
-            chbPaid.setDisable(false);
-            chbCompetitive.setDisable(false);
-            //endregion
-
-            firstMember();
-        } catch (Exception e) {
-            System.out.println("XML reading issue");
+            membersList.add(newMember);
         }
+        addBindings();
     }
-
-    public void btnSaveClicked(){
-        try {
-            writeStudents();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void btnSearchClicked(){
-        Search(txtSearch.getText());
-    }
-
-    public void btnMemberAddClicked(){
-        newMember();
-    }
-
-    public void btnMemberDeleteClicked(){
-        removeMember();
-    }
-
-    public void btnEditImageClicked(){
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Select image");
-        File file = fileChooser.showOpenDialog(null);
-        if (file != null) {
-            Member mem = lvMembers.getSelectionModel().getSelectedItem();
-            mem.setImage(new Image(file.toURI().toString()));
-        }
-    }
-
-    public void btnSaveToDbClicked(){
-        for (Member member : observableMembers) {
-            //region Get data from member
-            String ID = member.getId();
-            String Name = member.getName();
-            String Surname = member.getSurname();
-            String Gender = member.getGender();
-            Boolean Student = member.isStudent();
-            String StudentNum = member.getStudentNumber();
-            String bLevel = member.getbLevel();
-            String lLevel = member.getlLevel();
-            Boolean Paid = member.isPaid();
-            Boolean Competitive = member.isCompetitive();
-            String Email = member.getEmail();
-            String Phone = member.getPhone();
-            String Street = member.getStreet();
-            String Suburb = member.getSuburb();
-            String Diet = member.getDietary();
-            String Medical = member.getMedical();
-            String Disabilities = member.getDisabilities();
-            String Image = "/resources/" + Name + " " + Surname + ".jpg";
-            //endregion
-
-            String sql = "SELECT * FROM Members WHERE ID = '" + ID + "'";
-            ResultSet rs = db.runSQL(sql);
-
-            try {
-                if (!rs.next()) {
-                    sql = String.format("INSERT INTO Members (ID, Name, Surname, Gender, Student, StudentNum, bLevel, lLevel, Paid, Competitive, Email, Phone, Street, Suburb, Diet, Medical, Disabilities, Image) " +
-                                    "VALUES ('%s', '%s', '%s', '%s', %b, '%s', '%s', '%s', %b, %b, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')",
-                            ID, Name, Surname, Gender, Student, StudentNum, bLevel, lLevel, Paid, Competitive, Email, Phone, Street, Suburb, Diet, Medical, Disabilities, Image);
-
-                    db.runSQL(sql);
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-
-        System.out.println("Done. DB ready");
-    }
-
-    //endregion
 
     private void addBindings(){
-        lvMembers.setItems(observableMembers);
+        lvMembers.setItems(membersList.getObservableMembers());
         lvMembers.getSelectionModel().selectFirst();
 
         lvMembers.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
@@ -240,255 +135,168 @@ public class Main extends Application {
             }
         });
 
-        lblMemberCount.textProperty().bind(lvMembers.getSelectionModel().selectedIndexProperty().add(1).asString().concat(" of ").concat(observableMembers.size()));
+        lblMemberCount.textProperty().bind(lvMembers.getSelectionModel().selectedIndexProperty().add(1).asString().concat(" of ").concat(membersList.size()));
     }
 
-    private void readMember() throws Exception {
-        File IS = new File("MemberRecords.xml");
+    //region UI Methods
+    public void btnLoadClicked(){
+        membersList = new MembersList(lvMembers);
+        try {
+            btnLoad.setDisable(true);
+            readMembersFromDB();
+            //region Enable Components
+            btnSave.setDisable(false);
+            btnMemberAdd.setDisable(false);
+            btnMemberDelete.setDisable(false);
+            btnEditImage.setDisable(false);
 
-        DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
-        Document doc = documentBuilder.parse(IS);
+            txtName.setDisable(false);
+            txtSurname.setDisable(false);
+            txtStudentNumber.setDisable(false);
+            txtEmail.setDisable(false);
+            txtPhone.setDisable(false);
+            txtStreet.setDisable(false);
+            txtSuburb.setDisable(false);
+            txtDiet.setDisable(false);
+            txtMedical.setDisable(false);
+            txtDisabilities.setDisable(false);
 
-        XPathFactory xPathFactory = XPathFactory.newInstance();
-        XPath xPath = xPathFactory.newXPath();
+            txtSearch.setDisable(false);
+            btnSearch.setDisable(false);
 
-        String expr = "//Member";
-        NodeList members = (NodeList) xPath.compile(expr).evaluate(doc, XPathConstants.NODESET);
-        for (int x = 0; x < members.getLength(); x++) {
-            Element member = (Element) xPath.compile("MemberInfo").evaluate(members.item(x), XPathConstants.NODE);
+            cbGender.setDisable(false);
+            ObservableList<String> genders = FXCollections.observableArrayList("Male","Female");
+            cbGender.setItems(genders);
+            cbBLevel.setDisable(false);
+            cbLLevel.setDisable(false);
+            ObservableList<String> levels = FXCollections.observableArrayList("Basics","Beginner", "Intermediate", "Advanced", "PreBronze", "Bronze", "Silver", "Gold", "Novice", "PreChamp", "Champ");
+            cbBLevel.setItems(levels);
+            cbLLevel.setItems(levels);
 
-            String id = member.getChildNodes().item(1).getTextContent();
-            String name = member.getChildNodes().item(3).getTextContent();
-            String surname = member.getChildNodes().item(5).getTextContent();
-            String gender = member.getChildNodes().item(7).getTextContent();
-            Boolean student = Boolean.parseBoolean(member.getChildNodes().item(9).getTextContent());
-            String studentNumber = member.getChildNodes().item(11).getTextContent();
-            String email = member.getChildNodes().item(13).getTextContent();
-            String phone = member.getChildNodes().item(15).getTextContent();
-            String street = member.getChildNodes().item(17).getTextContent();
-            String suburb = member.getChildNodes().item(19).getTextContent();
-            String bLevel = member.getChildNodes().item(21).getTextContent();
-            String lLevel = member.getChildNodes().item(23).getTextContent();
-            Boolean paid = Boolean.parseBoolean(member.getChildNodes().item(25).getTextContent());
-            Boolean competitive = Boolean.parseBoolean(member.getChildNodes().item(27).getTextContent());
-            String diet = member.getChildNodes().item(29).getTextContent();
-            String medical = member.getChildNodes().item(31).getTextContent();
-            String disabilities = member.getChildNodes().item(33).getTextContent();
-            Image image = new Image(this.getClass().getResourceAsStream("/resources/" + name + " " + surname + ".jpg"));
+            chbStudent.setDisable(false);
+            chbPaid.setDisable(false);
+            chbCompetitive.setDisable(false);
+            //endregion
 
-            Member newMember = new Member(id, name, surname, gender, student, studentNumber, email, phone, street, suburb, bLevel, lLevel, paid, competitive, diet, medical, disabilities, image);
-
-            observableMembers.add(newMember);
-        }
-        observableMembers.sort(new MemberComparitor());
-        addBindings();
-    }
-
-    //region Writing data to a XML file
-    private static void writeStudents() throws Exception {
-        Document outputDoc = createDoc();
-        Element rootNode = outputDoc.createElement("MemberRecords");
-        Element member;
-        for (Member mem : observableMembers) {
-            member = outputDoc.createElement("Member");
-            member.appendChild(memberInfo(outputDoc, mem));
-            rootNode.appendChild(member);
-
-            String imageName = mem.getName() + " " + mem.getSurname() + ".jpg";
-            ImageIO.write(SwingFXUtils.fromFXImage(mem.getImage(), null), "jpg", new File("./src//resources//" + imageName));
-        }
-        outputDoc.appendChild(rootNode);
-        saveDoc(outputDoc, "MemberRecords.xml");
-        System.out.println("Saved successfully");
-    }
-
-    private static Element memberInfo(Document outputDoc, Member member) {
-        Element memberInfo = outputDoc.createElement("MemberInfo");
-
-        //region Get data
-
-        //region ID
-        Element ID = outputDoc.createElement("ID");
-        Text textID = outputDoc.createTextNode(member.getId());
-        ID.appendChild(textID);
-        //endregion
-
-        //region Name
-        Element name = outputDoc.createElement("Name");
-        Text textName = outputDoc.createTextNode(member.getName());
-        name.appendChild(textName);
-        //endregion
-
-        //region Surname
-        Element surname = outputDoc.createElement("Surname");
-        Text textSurname = outputDoc.createTextNode(member.getSurname());
-        surname.appendChild(textSurname);
-        //endregion
-
-        //region Gender
-
-        Element Gender = outputDoc.createElement("Gender");
-        Text textGender = outputDoc.createTextNode(member.getGender());
-        Gender.appendChild(textGender);
-        //endregion
-
-        //region Student
-        Element student = outputDoc.createElement("Student");
-        Text textStudent = outputDoc.createTextNode(member.isStudent().toString());
-        student.appendChild(textStudent);
-        //endregion
-
-        //region StudentNum
-        Element studentNum = outputDoc.createElement("StudentNum");
-        Text textStudentNum = outputDoc.createTextNode(member.getStudentNumber());
-        studentNum.appendChild(textStudentNum);
-        //endregion
-
-        //region Email
-        Element email = outputDoc.createElement("Email");
-        Text textEmail = outputDoc.createTextNode(member.getEmail());
-        email.appendChild(textEmail);
-        //endregion
-
-        //region Phone
-        Element phone = outputDoc.createElement("Phone");
-        Text textPhone = outputDoc.createTextNode(member.getPhone());
-        phone.appendChild(textPhone);
-        //endregion
-
-        //region Street
-        Element street = outputDoc.createElement("Street");
-        Text textStreet = outputDoc.createTextNode(member.getStreet());
-        street.appendChild(textStreet);
-        //endregion
-
-        //region Suburb
-        Element suburb = outputDoc.createElement("Suburb");
-        Text textSuburb = outputDoc.createTextNode(member.getSuburb());
-        suburb.appendChild(textSuburb);
-        //endregion
-
-        //region bLevel
-        Element bLevel = outputDoc.createElement("bLevel");
-        Text textBLevel = outputDoc.createTextNode(member.getbLevel());
-        bLevel.appendChild(textBLevel);
-        //endregion
-
-        //region lLevel
-        Element lLevel = outputDoc.createElement("lLevel");
-        Text textLLevel = outputDoc.createTextNode(member.getlLevel());
-        lLevel.appendChild(textLLevel);
-        //endregion
-
-        //region Paid
-        Element Paid = outputDoc.createElement("Paid");
-        Text textPaid = outputDoc.createTextNode(member.isPaid().toString());
-        Paid.appendChild(textPaid);
-        //endregion
-
-        //region Competitive
-        Element Competitive = outputDoc.createElement("Competitive");
-        Text textCompetitive = outputDoc.createTextNode(member.isCompetitive().toString());
-        Competitive.appendChild(textCompetitive);
-        //endregion
-
-        //region Diet
-        Element Diet = outputDoc.createElement("Diet");
-        Text textDiet = outputDoc.createTextNode(member.getDietary());
-        Diet.appendChild(textDiet);
-        //endregion
-
-        //region Medical
-        Element Medical = outputDoc.createElement("Medical");
-        Text textMedical = outputDoc.createTextNode(member.getMedical());
-        Medical.appendChild(textMedical);
-        //endregion
-
-        //region Disabilities
-        Element Disabilities = outputDoc.createElement("Disabilities");
-        Text textDisabilities = outputDoc.createTextNode(member.getDisabilities());
-        Disabilities.appendChild(textDisabilities);
-        //endregion
-
-        //endregion
-
-        //region Save data
-        memberInfo.appendChild(ID);
-        memberInfo.appendChild(name);
-        memberInfo.appendChild(surname);
-        memberInfo.appendChild(Gender);
-        memberInfo.appendChild(student);
-        memberInfo.appendChild(studentNum);
-        memberInfo.appendChild(email);
-        memberInfo.appendChild(phone);
-        memberInfo.appendChild(street);
-        memberInfo.appendChild(suburb);
-        memberInfo.appendChild(bLevel);
-        memberInfo.appendChild(lLevel);
-        memberInfo.appendChild(Paid);
-        memberInfo.appendChild(Competitive);
-        memberInfo.appendChild(Diet);
-        memberInfo.appendChild(Medical);
-        memberInfo.appendChild(Disabilities);
-        //endregion
-
-        return memberInfo;
-    }
-
-    private static Document createDoc() throws Exception {
-        // create DocumentBuilder to parse XML document
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder builder = factory.newDocumentBuilder();
-
-        // create empty document
-        return builder.newDocument();
-    }
-
-    private static void saveDoc(Document doc, String filename) throws Exception {
-        // obtain serializer
-        DOMImplementation impl = doc.getImplementation();
-        DOMImplementationLS implLS = (DOMImplementationLS) impl.getFeature("LS", "3.0");
-        LSSerializer ser = implLS.createLSSerializer();
-        ser.getDomConfig().setParameter("format-pretty-print", true);
-
-        // create file to save too
-        FileOutputStream fout = new FileOutputStream(filename);
-
-        // set encoding options
-        LSOutput lsOutput = implLS.createLSOutput();
-        lsOutput.setEncoding("UTF-8");
-
-        // tell to save xml output to file
-        lsOutput.setByteStream(fout);
-
-        // FINALLY write output
-        ser.write(doc, lsOutput);
-
-        // close file
-        fout.close();
-    }
-    //endregion
-
-    //region Functions for Students
-    private void firstMember() {
-        System.out.println("|<\tFirst Member.");
-
-        lvMembers.getSelectionModel().selectFirst();
-        lvMembers.scrollTo(0);
-    }
-
-    private void lastMember() {
-        System.out.println(">|\tLast.");
-
-        if (memberArrayList.size() > 0)
-        {
-            lvMembers.getSelectionModel().selectLast();
-            lvMembers.scrollTo(observableMembers.size()-1);
+            membersList.goToFirst();
+        } catch (Exception e) {
+            System.out.println("XML reading issue");
+            e.printStackTrace();
         }
     }
 
-    private void newMember() {
+    public void btnSaveClicked(){
+        //region New Members
+        ArrayList<Member> newMembers = membersList.getNewMembers();
+        if (!newMembers.isEmpty()){
+            for (Member member : newMembers) {
+                //region Get data from member
+                String ID = member.getId();
+                String Name = member.getName();
+                String Surname = member.getSurname();
+                String Gender = member.getGender();
+                Boolean Student = member.isStudent();
+                String StudentNum = member.getStudentNumber();
+                String bLevel = member.getbLevel();
+                String lLevel = member.getlLevel();
+                Boolean Paid = member.isPaid();
+                Boolean Competitive = member.isCompetitive();
+                String Email = member.getEmail();
+                String Phone = member.getPhone();
+                String Street = member.getStreet();
+                String Suburb = member.getSuburb();
+                String Diet = member.getDietary();
+                String Medical = member.getMedical();
+                String Disabilities = member.getDisabilities();
+                String imageName = "/resources/" + ID + ".jpg";
+                //endregion
+
+                String sql = String.format("INSERT INTO Members VALUES ('%s', '%s', '%s', '%s', %b, '%s', '%s', '%s', %b, %b, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')",
+                        ID, Name, Surname, Gender, Student, StudentNum, bLevel, lLevel, Paid, Competitive, Email, Phone, Street, Suburb, Diet, Medical, Disabilities, imageName);
+
+                db.runSQL(sql);
+
+                try {
+                    ImageIO.write(SwingFXUtils.fromFXImage(member.getImage(), null), "jpg", new File("./src//resources//" + ID + ".jpg"));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            membersList.setNewMembers(new ArrayList<>());
+            System.out.println("New members added");
+        }
+        //endregion
+
+        //region Changes
+        ArrayList<Member> changedMembers = membersList.getChanges();
+        if (!changedMembers.isEmpty()){
+            for (Member member : changedMembers) {
+                //region Get data from member
+                String ID = member.getId();
+                String Name = member.getName();
+                String Surname = member.getSurname();
+                String Gender = member.getGender();
+                Boolean Student = member.isStudent();
+                String StudentNum = member.getStudentNumber();
+                String bLevel = member.getbLevel();
+                String lLevel = member.getlLevel();
+                Boolean Paid = member.isPaid();
+                Boolean Competitive = member.isCompetitive();
+                String Email = member.getEmail();
+                String Phone = member.getPhone();
+                String Street = member.getStreet();
+                String Suburb = member.getSuburb();
+                String Diet = member.getDietary();
+                String Medical = member.getMedical();
+                String Disabilities = member.getDisabilities();
+                String imageName = "/resources/" + ID + ".jpg";
+                //endregion
+
+                try {
+                    ImageIO.write(SwingFXUtils.fromFXImage(member.getImage(), null), "jpg", new File("./src//resources//" + ID + ".jpg"));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                String sql = String.format("UPDATE Members SET Name = '%s', Surname = '%s', Gender = '%s', Student = %b, StudentNum = '%s', bLevel = '%s', lLevel = '%s', Paid = %b, Competitive = %b, Email = '%s', Phone = '%s', Street = '%s', Suburb = '%s', Diet = '%s', Medical = '%s', Disabilities = '%s', Image = '%s' " +
+                        "WHERE ID = '%s'", Name, Surname, Gender, Student, StudentNum, bLevel, lLevel, Paid, Competitive, Email, Phone, Street, Suburb, Diet, Medical, Disabilities, imageName, ID);
+
+                db.runSQL(sql);
+
+                member.setChanged(false);
+            }
+
+            System.out.println("Changes Saved");
+        }
+        //endregion
+
+        //region Remove Members
+        ArrayList<Member> removedMembers = membersList.getRemovedMembers();
+        if (!removedMembers.isEmpty()){
+            for (Member member : removedMembers) {
+                String ID = member.getId();
+
+                String sql = String.format("DELETE FROM Members WHERE ID = '%s';", ID);
+                db.runSQL(sql);
+
+                File image = new File("./src//resources//" + ID + ".jpg");
+                image.delete();
+            }
+
+            membersList.setRemovedMembers(new ArrayList<>());
+            System.out.println("Members removed");
+        }
+        //endregion
+
+        System.out.println("Save Completed");
+    }
+
+    public void btnSearchClicked(){
+        membersList.find(txtSearch.getText());
+    }
+
+    public void btnMemberAddClicked(){
         System.out.println("[]\tNew Member.");
 
         AddMember addMember = new AddMember();
@@ -496,39 +304,23 @@ public class Main extends Application {
         Member newMember = addMember.getNewMember();
 
         if(newMember != null)
-        {
-            observableMembers.add(newMember);
-            observableMembers.sort(new MemberComparitor());
+            membersList.add(newMember);
+    }
 
-            lvMembers.getSelectionModel().select(newMember);
-            lvMembers.scrollTo(newMember);
+    public void btnMemberDeleteClicked(){
+        membersList.remove();
+    }
+
+    public void btnEditImageClicked(){
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Select image");
+        File file = fileChooser.showOpenDialog(null);
+        if (file != null) {
+            Member member = lvMembers.getSelectionModel().getSelectedItem();
+            member.setImage(new Image(file.toURI().toString()));
         }
     }
 
-    private void removeMember() {
-        System.out.println("[]\tRemove Student.");
-
-        Member mem = lvMembers.getSelectionModel().getSelectedItem();
-        if(mem != null) {
-//            String imageName = mem.getName() + " " + mem.getSurname() + ".jpg";
-//            File image = new File("./src//resources//" + imageName);
-//            image.delete();
-
-            observableMembers.remove(mem);
-        }
-        firstMember();
-    }
-
-    private void Search(String name){
-        for (Member mem : observableMembers)
-            if (mem.toString().toUpperCase().contains(name.toUpperCase())) {
-                lvMembers.getSelectionModel().select(mem);
-                lvMembers.scrollTo(mem);
-                return;
-            }
-
-        System.out.println("Not Found");
-    }
     //endregion
 
 }
