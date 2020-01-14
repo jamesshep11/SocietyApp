@@ -20,7 +20,7 @@ public class DatabaseConnection {
         try {
             con = DriverManager.getConnection("jdbc:mysql://remotemysql.com:3306/YFMcmGkWeX", "YFMcmGkWeX", "Aqbd2K6iT5");
             st = con.createStatement();
-            System.out.println("\n Connected successfully \n");
+            System.out.println("\n Connection to DB successful \n");
         } catch (SQLException e) {
             e.printStackTrace();
             con = null;
