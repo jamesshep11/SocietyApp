@@ -1,6 +1,11 @@
 import javafx.beans.property.*;
 import javafx.scene.image.Image;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Date;
+
 public class Member {
     //region Attributes
     private StringProperty id = new SimpleStringProperty();
@@ -264,6 +269,11 @@ public class Member {
         medical.addListener((observable, oldValue, newValue) -> changed = true);
         disabilities.addListener((observable, oldValue, newValue) -> changed = true);
         image.addListener((observable, oldValue, newValue) -> changed = true);
+    }
+
+    public void markAttendance(DatabaseConnection db) throws SQLException
+    {
+
     }
 
     @Override

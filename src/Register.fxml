@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Register">
+   <children>
+      <ChoiceBox fx:id="chbEvents" layoutX="330.0" layoutY="144.0" prefWidth="150.0" />
+      <ChoiceBox fx:id="chbMembers" layoutX="120.0" layoutY="144.0" prefWidth="150.0" />
+      <Button fx:id="btnAttendance" layoutX="141.0" layoutY="208.0" mnemonicParsing="false" text="Mark Attendance" textAlignment="CENTER" wrapText="true" />
+      <Button fx:id="btnUnAttendance" layoutX="344.0" layoutY="208.0" mnemonicParsing="false" text="Unmark Attendance" wrapText="true" />
+      <Button fx:id="btnAddEvent" layoutX="490.0" layoutY="144.0" mnemonicParsing="false" onAction="#btnAddEventClicked" text="+" />
+   </children>
+</AnchorPane>
