@@ -16,7 +16,7 @@
    <children>
       <VBox prefHeight="468.0" prefWidth="126.0" spacing="11.0">
          <children>
-            <Label id="lblMemberDetails" text="Member Details">
+            <Label id="lblMemberDetails" text="Members.Member Details">
                <font>
                   <Font name="System Bold" size="12.0" />
                </font>

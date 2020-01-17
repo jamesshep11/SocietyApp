@@ -12,10 +12,15 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="572.0" prefWidth="800.0" spacing="10.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Main">
+<HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" spacing="10.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MemberDetails">
     <children>
-        <VBox prefHeight="468.0" prefWidth="184.0" spacing="5.0">
+        <VBox prefWidth="184.0" spacing="5.0">
             <children>
+            <Button fx:id="btnBack" mnemonicParsing="false" onAction="#btnBackClicked" text="&lt;  Back">
+               <VBox.margin>
+                  <Insets bottom="15.0" />
+               </VBox.margin></Button>
+                <ListView id="lvMembers" fx:id="lvMembers" prefHeight="327.0" prefWidth="150.0" />
                 <HBox prefHeight="33.0" prefWidth="128.0" spacing="5.0">
                     <children>
                         <TextField id="txtSearch" fx:id="txtSearch" disable="true" prefHeight="25.0" prefWidth="110.0" />
@@ -25,10 +30,9 @@
                         <Insets />
                     </VBox.margin>
                 </HBox>
-                <ListView id="lvMembers" fx:id="lvMembers" prefHeight="327.0" prefWidth="150.0" />
             </children>
         </VBox>
-        <VBox prefHeight="468.0" prefWidth="126.0" spacing="11.0">
+        <VBox prefWidth="126.0" spacing="11.0">
             <children>
                 <Button id="btnLoad" fx:id="btnLoad" mnemonicParsing="false" onAction="#btnLoadClicked" prefHeight="25.0" prefWidth="75.0" text="Load" />
                 <Label id="lblMemberDetails" text="Member Details">
@@ -54,10 +58,10 @@
                 <Label text="Disabilities" />
             </children>
         </VBox>
-        <VBox prefHeight="468.0" prefWidth="157.0" spacing="5.0">
+        <VBox prefWidth="157.0" spacing="5.0">
             <children>
                 <Button id="btnSave" fx:id="btnSave" disable="true" mnemonicParsing="false" onAction="#btnSaveClicked" prefHeight="25.0" prefWidth="75.0" text="Save" />
-                <HBox prefHeight="34.0" prefWidth="94.0" spacing="5.0">
+                <HBox spacing="5.0">
                     <children>
                         <Button id="btnMemberAdd" fx:id="btnMemberAdd" disable="true" mnemonicParsing="false" onAction="#btnMemberAddClicked" prefHeight="25.0" prefWidth="43.0" text="+" />
                         <Button id="btnMemberDelete" fx:id="btnMemberDelete" disable="true" mnemonicParsing="false" onAction="#btnMemberDeleteClicked" prefHeight="25.0" prefWidth="43.0" text="-" />
@@ -83,7 +87,7 @@
                 <Label id="lblMemberCount" fx:id="lblMemberCount" text="A of B" />
             </children>
         </VBox>
-        <VBox prefHeight="562.0" prefWidth="197.0" spacing="10.0">
+        <VBox spacing="10.0">
             <children>
                 <ImageView id="imgMember" fx:id="imgMember" fitHeight="290.0" fitWidth="290.0" pickOnBounds="true" preserveRatio="true" />
                 <Button id="btnEditImage" fx:id="btnEditImage" disable="true" mnemonicParsing="false" onAction="#btnEditImageClicked" text="Edit Image" />

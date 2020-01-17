@@ -1,3 +1,4 @@
+import Members.Member;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -30,7 +31,7 @@ public class AddMember
     public AddMember() {
     }
 
-    public void loadAddMember(Stage parent){
+    public void load(Stage parent){
         db = new DatabaseConnection();
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("AddMember.fxml"));
