@@ -1,3 +1,5 @@
+package Members;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ListView;
@@ -52,7 +54,7 @@ public class MembersList
     //endregion
 
     public void goToFirst() {
-        System.out.println("|<\tFirst Member.");
+        System.out.println("|<\tFirst Members.Member.");
 
         lvMembers.getSelectionModel().selectFirst();
         lvMembers.scrollTo(0);

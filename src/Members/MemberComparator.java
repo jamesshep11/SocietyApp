@@ -1,3 +1,5 @@
+package Members;
+
 import java.util.Comparator;
 
 public class MemberComparator implements Comparator<Member>

@@ -1,3 +1,5 @@
+package Members;
+
 import javafx.beans.property.*;
 import javafx.scene.image.Image;
 
@@ -269,11 +271,6 @@ public class Member {
         medical.addListener((observable, oldValue, newValue) -> changed = true);
         disabilities.addListener((observable, oldValue, newValue) -> changed = true);
         image.addListener((observable, oldValue, newValue) -> changed = true);
-    }
-
-    public void markAttendance(DatabaseConnection db) throws SQLException
-    {
-
     }
 
     @Override
