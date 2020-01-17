@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Register">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="225.0" prefWidth="455.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Register">
    <children>
-      <ChoiceBox fx:id="chbEvents" layoutX="330.0" layoutY="144.0" prefWidth="150.0" />
-      <ChoiceBox fx:id="chbMembers" layoutX="120.0" layoutY="144.0" prefWidth="150.0" />
-      <Button fx:id="btnAttendance" layoutX="141.0" layoutY="208.0" mnemonicParsing="false" text="Mark Attendance" textAlignment="CENTER" wrapText="true" />
-      <Button fx:id="btnUnAttendance" layoutX="344.0" layoutY="208.0" mnemonicParsing="false" text="Unmark Attendance" wrapText="true" />
-      <Button fx:id="btnAddEvent" layoutX="490.0" layoutY="144.0" mnemonicParsing="false" onAction="#btnAddEventClicked" text="+" />
+      <Button fx:id="btnAttendance" layoutX="71.0" layoutY="143.0" mnemonicParsing="false" onAction="#btnMarkAttendanceClicked" text="Mark Attendance" textAlignment="CENTER" wrapText="true" />
+      <Button fx:id="btnUnAttendance" layoutX="239.0" layoutY="143.0" mnemonicParsing="false" onAction="#btnUnMarkAttendanceClicked" text="Unmark Attendance" wrapText="true" />
+      <Button fx:id="btnAddEvent" layoutX="385.0" layoutY="89.0" mnemonicParsing="false" onAction="#btnAddEventClicked" text="+" />
+      <Button fx:id="btnBack" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#btnBackClicked" text="&lt;  Back" />
+      <Label layoutX="71.0" layoutY="68.0" text="Member" />
+      <ComboBox id="chbMembers" fx:id="chbMembers" editable="true" layoutX="50.0" layoutY="89.0" prefWidth="150.0" />
+      <ComboBox id="chbEvents" fx:id="chbEvents" editable="true" layoutX="225.0" layoutY="89.0" prefWidth="150.0" />
+      <Label layoutX="239.0" layoutY="68.0" text="Event" />
    </children>
 </AnchorPane>
