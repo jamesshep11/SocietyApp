@@ -53,20 +53,26 @@ public class Register
 
     public void btnAddEventClicked() throws SQLException
     {
-        String eventName = JOptionPane.showInputDialog(null, "Event name: ", "New Event", JOptionPane.QUESTION_MESSAGE);
+        String eventName = JOptionPane.showInputDialog(null, "Event name (no spaces): ", "New Event", JOptionPane.QUESTION_MESSAGE);
+        newEvent(eventName);
+    }
+
+    private void newEvent(String eventName) throws SQLException
+    {
+        if(eventName.contains(" ")) {
+            JOptionPane.showMessageDialog(null, "The event name cannot contain a space.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
         String sql = String.format("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'Register' AND COLUMN_NAME = '%s'", eventName);
         ResultSet rs = db.runSQL(sql);
-
         if(rs.next()){
             JOptionPane.showMessageDialog(null, "That event already exists.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        newEvent(eventName);
-    }
-
-    private void newEvent(String eventName){
-        String sql = "";
+        sql = "ALTER TABLE Register ADD " + eventName + " boolean(1) DEFAULT 0";
+        db.runSQL(sql);
     }
 
 }

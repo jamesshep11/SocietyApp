@@ -13,6 +13,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 import java.sql.ResultSet;
@@ -88,6 +89,9 @@ public class Main extends Application {
         lvMembers.getSelectionModel().selectFirst();
 
         lvMembers.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+
+            btnSaveClicked(oldValue);
+
             if (oldValue != null){
                 //region Unbind Old
                 txtID.textProperty().unbindBidirectional(oldValue.idProperty());
@@ -143,6 +147,7 @@ public class Main extends Application {
         membersList = new MembersList(lvMembers);
         try {
             btnLoad.setDisable(true);
+            populateTables();
             readMembersFromDB();
             //region Enable Components
             btnSave.setDisable(false);
@@ -185,53 +190,9 @@ public class Main extends Application {
         }
     }
 
-    public void btnSaveClicked(){
-        //region New Members
-        ArrayList<Member> newMembers = membersList.getNewMembers();
-        if (!newMembers.isEmpty()){
-            for (Member member : newMembers) {
-                //region Get data from member
-                String ID = member.getId();
-                String Name = member.getName();
-                String Surname = member.getSurname();
-                String Gender = member.getGender();
-                Boolean Student = member.isStudent();
-                String StudentNum = member.getStudentNumber();
-                String bLevel = member.getbLevel();
-                String lLevel = member.getlLevel();
-                Boolean Paid = member.isPaid();
-                Boolean Competitive = member.isCompetitive();
-                String Email = member.getEmail();
-                String Phone = member.getPhone();
-                String Street = member.getStreet();
-                String Suburb = member.getSuburb();
-                String Diet = member.getDietary();
-                String Medical = member.getMedical();
-                String Disabilities = member.getDisabilities();
-                String imageName = "/resources/" + ID + ".jpg";
-                //endregion
-
-                String sql = String.format("INSERT INTO Members VALUES ('%s', '%s', '%s', '%s', %b, '%s', '%s', '%s', %b, %b, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')",
-                        ID, Name, Surname, Gender, Student, StudentNum, bLevel, lLevel, Paid, Competitive, Email, Phone, Street, Suburb, Diet, Medical, Disabilities, imageName);
-
-                db.runSQL(sql);
-
-                try {
-                    ImageIO.write(SwingFXUtils.fromFXImage(member.getImage(), null), "jpg", new File("./src//resources//" + ID + ".jpg"));
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            membersList.setNewMembers(new ArrayList<>());
-            System.out.println("New members added");
-        }
-        //endregion
-
-        //region Changes
-        ArrayList<Member> changedMembers = membersList.getChanges();
-        if (!changedMembers.isEmpty()){
-            for (Member member : changedMembers) {
+    public void btnSaveClicked(Member member){
+        if (member.isChanged()){
+            if (0 == JOptionPane.showConfirmDialog(null, "You made changes to this member's details. \n Would you like to save these changes?", "Save Changes", JOptionPane.YES_NO_OPTION)) {
                 //region Get data from member
                 String ID = member.getId();
                 String Name = member.getName();
@@ -266,35 +227,9 @@ public class Main extends Application {
 
                 member.setChanged(false);
             }
-
-            System.out.println("Changes Saved");
         }
-        //endregion
 
-        //region Remove Members
-        ArrayList<Member> removedMembers = membersList.getRemovedMembers();
-        if (!removedMembers.isEmpty()){
-            for (Member member : removedMembers) {
-                String ID = member.getId();
-
-                String sql = String.format("DELETE FROM Members WHERE ID = '%s';", ID);
-                db.runSQL(sql);
-
-                File image = new File("./src//resources//" + ID + ".jpg");
-                if(!image.delete())
-                    try {
-                        throw new Exception("Image " + image.getName() + " not deleted");
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-            }
-
-            membersList.setRemovedMembers(new ArrayList<>());
-            System.out.println("Members removed");
-        }
-        //endregion
-
-        System.out.println("Save Completed");
+        System.out.println("Changes saved");
     }
 
     public void btnSearchClicked(){
@@ -308,12 +243,70 @@ public class Main extends Application {
         addMember.loadAddMember((Stage)txtID.getScene().getWindow());
         Member newMember = addMember.getNewMember();
 
-        if(newMember != null)
+        if(newMember != null) {
             membersList.add(newMember);
+
+            //region Get data from member
+            String ID = newMember.getId();
+            String Name = newMember.getName();
+            String Surname = newMember.getSurname();
+            String Gender = newMember.getGender();
+            Boolean Student = newMember.isStudent();
+            String StudentNum = newMember.getStudentNumber();
+            String bLevel = newMember.getbLevel();
+            String lLevel = newMember.getlLevel();
+            Boolean Paid = newMember.isPaid();
+            Boolean Competitive = newMember.isCompetitive();
+            String Email = newMember.getEmail();
+            String Phone = newMember.getPhone();
+            String Street = newMember.getStreet();
+            String Suburb = newMember.getSuburb();
+            String Diet = newMember.getDietary();
+            String Medical = newMember.getMedical();
+            String Disabilities = newMember.getDisabilities();
+            String imageName = "/resources/" + ID + ".jpg";
+            //endregion
+
+            String sql = String.format("INSERT INTO Members VALUES ('%s', '%s', '%s', '%s', %b, '%s', '%s', '%s', %b, %b, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')",
+                    ID, Name, Surname, Gender, Student, StudentNum, bLevel, lLevel, Paid, Competitive, Email, Phone, Street, Suburb, Diet, Medical, Disabilities, imageName);
+            db.runSQL(sql);
+
+            sql = String.format("INSERT INTO Payments (MemberID) VALUES ('%s')", ID);
+            db.runSQL(sql);
+
+            sql = String.format("INSERT INTO Register (MemberID) VALUES ('%s')", ID);
+            db.runSQL(sql);
+
+            try {
+                ImageIO.write(SwingFXUtils.fromFXImage(newMember.getImage(), null), "jpg", new File("./src//resources//" + ID + ".jpg"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            System.out.println("New member added");
+        }
     }
 
     public void btnMemberDeleteClicked(){
-        membersList.remove();
+        Member member = lvMembers.getSelectionModel().getSelectedItem();
+
+        if (member != null) {
+            membersList.remove(member);
+
+            String ID = member.getId();
+            String sql = String.format("DELETE FROM Members WHERE ID = '%s';", ID);
+            db.runSQL(sql);
+
+            File image = new File("./src//resources//" + ID + ".jpg");
+            if (!image.delete())
+                try {
+                    throw new Exception("Image " + image.getName() + " not deleted");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            System.out.println("Member removed");
+        }
     }
 
     public void btnEditImageClicked(){
@@ -327,5 +320,19 @@ public class Main extends Application {
     }
 
     //endregion
+
+    private void populateTables() throws SQLException
+    {
+        String sql = "SELECT ID FROM Members";
+        ResultSet rs = db.runSQL(sql);
+        String id;
+        while (rs.next()){
+            id = rs.getString("ID");
+            sql = String.format("INSERT INTO Register (MemberID) VALUES ('%s')", id);
+            db.runSQL(sql);
+            sql = String.format("INSERT INTO Payments (MemberID) VALUES ('%s')", id);
+            db.runSQL(sql);
+        }
+    }
 
 }

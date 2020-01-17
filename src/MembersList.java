@@ -6,8 +6,6 @@ import java.util.ArrayList;
 
 public class MembersList
 {
-    private ArrayList<Member> newMembers = new ArrayList<>();
-    private ArrayList<Member> removedMembers = new ArrayList<>();
     private ArrayList<Member> memberArrayList = new ArrayList<>();
     private ObservableList<Member> observableMembers = FXCollections.observableArrayList(memberArrayList);
     private ListView<Member> lvMembers;
@@ -37,14 +35,6 @@ public class MembersList
         this.lvMembers = lvMembers;
     }
 
-    public ArrayList<Member> getNewMembers(){
-        return newMembers;
-    }
-
-    public void setNewMembers(ArrayList<Member> newMembers){
-        this.newMembers = newMembers;
-    }
-
     public ArrayList<Member> getChanges(){
         ArrayList<Member> changedMembers = new ArrayList<>();
 
@@ -53,14 +43,6 @@ public class MembersList
                 changedMembers.add(x);
 
         return changedMembers;
-    }
-
-    public ArrayList<Member> getRemovedMembers(){
-        return removedMembers;
-    }
-
-    public void setRemovedMembers(ArrayList<Member> removedMembers){
-        this.removedMembers = removedMembers;
     }
 
     public int size(){
@@ -87,7 +69,6 @@ public class MembersList
     }
 
     public void add(Member newMember) {
-        newMembers.add(newMember);
         observableMembers.add(newMember);
         observableMembers.sort(new MemberComparator());
 
@@ -95,18 +76,11 @@ public class MembersList
         lvMembers.scrollTo(newMember);
     }
 
-    public void remove() {
+    public void remove(Member member) {
         System.out.println("[]\tRemove Student.");
 
-        Member member = lvMembers.getSelectionModel().getSelectedItem();
-        if(member != null) {
-            if(newMembers.contains(member))
-                newMembers.remove(member);
-            else
-                removedMembers.add(member);
+        observableMembers.remove(member);
 
-            observableMembers.remove(member);
-        }
         goToFirst();
     }
 
