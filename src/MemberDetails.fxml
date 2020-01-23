@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.String?>
+<?import javafx.collections.FXCollections?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.CustomMenuItem?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.SplitMenuButton?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
@@ -30,6 +35,201 @@
                         <Insets />
                     </VBox.margin>
                 </HBox>
+            <SplitMenuButton fx:id="btnFilter" disable="true" mnemonicParsing="false" onAction="#btnFilterClicked" text="Filter">
+               <items>
+                  <CustomMenuItem hideOnClick="false" mnemonicParsing="false" text="Unspecified Action">
+                    <content>
+                      <CheckBox fx:id="chbFilterID">
+                           <graphic>
+                              <TextField fx:id="txtFilterID" promptText="ID Number" />
+                           </graphic></CheckBox>
+                    </content>
+                  </CustomMenuItem>
+                  <CustomMenuItem hideOnClick="false" mnemonicParsing="false" text="Unspecified Action">
+                     <content>
+                        <CheckBox fx:id="chbFilterName">
+                           <graphic>
+                              <TextField fx:id="txtFilterName" promptText="Name" />
+                           </graphic>
+                        </CheckBox>
+                     </content>
+                  </CustomMenuItem>
+                  <CustomMenuItem hideOnClick="false" mnemonicParsing="false" text="Unspecified Action">
+                     <content>
+                        <CheckBox fx:id="chbFilterSurname">
+                           <graphic>
+                              <TextField fx:id="txtFilterSurname" promptText="Surname" />
+                           </graphic>
+                        </CheckBox>
+                     </content>
+                  </CustomMenuItem>
+                  <CustomMenuItem hideOnClick="false" mnemonicParsing="false" text="Unspecified Action">
+                     <content>
+                        <CheckBox fx:id="chbFilterGender">
+                           <graphic>
+                              <ComboBox id="cbGender" fx:id="cbFilterGender" prefWidth="150.0" promptText="Gender" value="Male">
+                                  <items>
+                                      <FXCollections fx:factory="observableArrayList">
+                                          <String fx:value="Male" />
+                                          <String fx:value="Female" />
+                                      </FXCollections>
+                                  </items>
+                              </ComboBox>
+                           </graphic>
+                        </CheckBox>
+                     </content>
+                  </CustomMenuItem>
+                  <CustomMenuItem hideOnClick="false" mnemonicParsing="false" text="Unspecified Action">
+                     <content>
+                        <CheckBox fx:id="chbFilterStudent">
+                           <graphic>
+                              <RadioButton fx:id="rbFilterStudent" mnemonicParsing="false" text="Student" />
+                           </graphic>
+                        </CheckBox>
+                     </content>
+                  </CustomMenuItem>
+                  <CustomMenuItem hideOnClick="false" mnemonicParsing="false" text="Unspecified Action">
+                     <content>
+                        <CheckBox fx:id="chbFilterStudentNumber">
+                           <graphic>
+                              <TextField fx:id="txtFilterStudentNumber" promptText="Student Number" />
+                           </graphic>
+                        </CheckBox>
+                     </content>
+                  </CustomMenuItem>
+                  <CustomMenuItem hideOnClick="false" mnemonicParsing="false" text="Unspecified Action">
+                     <content>
+                        <CheckBox fx:id="chbFilterBLevel">
+                           <graphic>
+                              <ComboBox id="cbBLevel" fx:id="cbFilterBLevel" prefWidth="150.0" promptText="Ballroom Level" value="Basics">
+                                  <items>
+                                      <FXCollections fx:factory="observableArrayList">
+                                          <String fx:value="Basics" />
+                                          <String fx:value="Beginner" />
+                                          <String fx:value="Intermediate" />
+                                          <String fx:value="Advanced" />
+                                          <String fx:value="PreBronze" />
+                                          <String fx:value="Bronze" />
+                                          <String fx:value="Silver" />
+                                          <String fx:value="Gold" />
+                                          <String fx:value="Novice" />
+                                          <String fx:value="PreChamp" />
+                                          <String fx:value="Championship" />
+                                      </FXCollections>
+                                  </items>
+                              </ComboBox>
+                           </graphic>
+                        </CheckBox>
+                     </content>
+                  </CustomMenuItem>
+                  <CustomMenuItem hideOnClick="false" mnemonicParsing="false" text="Unspecified Action">
+                     <content>
+                        <CheckBox fx:id="chbFilterLLevel">
+                           <graphic>
+                              <ComboBox id="cbLLevel" fx:id="cbFilterLLevel" prefWidth="150.0" promptText="Latin Level" value="Basics">
+                                  <items>
+                                      <FXCollections fx:factory="observableArrayList">
+                                          <String fx:value="Basics" />
+                                          <String fx:value="Beginner" />
+                                          <String fx:value="Intermediate" />
+                                          <String fx:value="Advanced" />
+                                          <String fx:value="PreBronze" />
+                                          <String fx:value="Bronze" />
+                                          <String fx:value="Silver" />
+                                          <String fx:value="Gold" />
+                                          <String fx:value="Novice" />
+                                          <String fx:value="PreChamp" />
+                                          <String fx:value="Championship" />
+                                      </FXCollections>
+                                  </items>
+                              </ComboBox>
+                           </graphic>
+                        </CheckBox>
+                     </content>
+                  </CustomMenuItem>
+                  <CustomMenuItem hideOnClick="false" mnemonicParsing="false" text="Unspecified Action">
+                     <content>
+                        <CheckBox fx:id="chbFilterPaid">
+                           <graphic>
+                              <RadioButton fx:id="rbFilterPaid" mnemonicParsing="false" text="Paid" />
+                           </graphic>
+                        </CheckBox>
+                     </content>
+                  </CustomMenuItem>
+                  <CustomMenuItem hideOnClick="false" mnemonicParsing="false" text="Unspecified Action">
+                     <content>
+                        <CheckBox fx:id="chbFilterCompetitive">
+                           <graphic>
+                              <RadioButton fx:id="rbFilterCompetitive" mnemonicParsing="false" text="Competitive" />
+                           </graphic>
+                        </CheckBox>
+                     </content>
+                  </CustomMenuItem>
+                  <CustomMenuItem hideOnClick="false" mnemonicParsing="false" text="Unspecified Action">
+                     <content>
+                        <CheckBox fx:id="chbFilterEmail">
+                           <graphic>
+                              <TextField fx:id="txtFilterEmail" promptText="Email" />
+                           </graphic>
+                        </CheckBox>
+                     </content>
+                  </CustomMenuItem>
+                  <CustomMenuItem hideOnClick="false" mnemonicParsing="false" text="Unspecified Action">
+                     <content>
+                        <CheckBox fx:id="chbFilterPhone">
+                           <graphic>
+                              <TextField fx:id="txtFilterPhone" promptText="Phone" />
+                           </graphic>
+                        </CheckBox>
+                     </content>
+                  </CustomMenuItem>
+                  <CustomMenuItem hideOnClick="false" mnemonicParsing="false" text="Unspecified Action">
+                     <content>
+                        <CheckBox fx:id="chbFilterStreet">
+                           <graphic>
+                              <TextField fx:id="txtFilterStreet" promptText="Street" />
+                           </graphic>
+                        </CheckBox>
+                     </content>
+                  </CustomMenuItem>
+                  <CustomMenuItem hideOnClick="false" mnemonicParsing="false" text="Unspecified Action">
+                     <content>
+                        <CheckBox fx:id="chbFilterSuburb">
+                           <graphic>
+                              <TextField fx:id="txtFilterSuburb" promptText="Suburb" />
+                           </graphic>
+                        </CheckBox>
+                     </content>
+                  </CustomMenuItem>
+                  <CustomMenuItem hideOnClick="false" mnemonicParsing="false" text="Unspecified Action">
+                     <content>
+                        <CheckBox fx:id="chbFilterDiet">
+                           <graphic>
+                              <TextField fx:id="txtFilterDiet" promptText="Diet Requirments" />
+                           </graphic>
+                        </CheckBox>
+                     </content>
+                  </CustomMenuItem>
+                  <CustomMenuItem hideOnClick="false" mnemonicParsing="false" text="Unspecified Action">
+                     <content>
+                        <CheckBox fx:id="chbFilterMedical">
+                           <graphic>
+                              <TextField fx:id="txtFilterMedical" promptText="Medical Conditions" />
+                           </graphic>
+                        </CheckBox>
+                     </content>
+                  </CustomMenuItem>
+                  <CustomMenuItem hideOnClick="false" mnemonicParsing="false" text="Unspecified Action">
+                     <content>
+                        <CheckBox fx:id="chbFilterDisabilities">
+                           <graphic>
+                              <TextField fx:id="txtFilterDisabilities" promptText="Disabilities" />
+                           </graphic>
+                        </CheckBox>
+                     </content>
+                  </CustomMenuItem>
+               </items>
+            </SplitMenuButton>
             </children>
         </VBox>
         <VBox prefWidth="126.0" spacing="11.0">
@@ -70,11 +270,50 @@
                 <TextField id="txtID" fx:id="txtID" disable="true" />
                 <TextField id="txtName" fx:id="txtName" disable="true" />
                 <TextField id="txtSurname" fx:id="txtSurname" disable="true" />
-                <ComboBox id="cbGender" fx:id="cbGender" disable="true" prefWidth="150.0" />
+                <ComboBox id="cbGender" fx:id="cbGender" disable="true" prefWidth="150.0">
+                    <items>
+                        <FXCollections fx:factory="observableArrayList">
+                            <String fx:value="Male" />
+                            <String fx:value="Female" />
+                        </FXCollections>
+                    </items>
+                </ComboBox>
                 <CheckBox id="chbStudent" fx:id="chbStudent" disable="true" mnemonicParsing="false" />
                 <TextField id="txtStudentNumber" fx:id="txtStudentNumber" disable="true" />
-                <ComboBox id="cbBLevel" fx:id="cbBLevel" disable="true" prefWidth="150.0" />
-                <ComboBox id="cbLLevel" fx:id="cbLLevel" disable="true" prefWidth="150.0" />
+                <ComboBox id="cbBLevel" fx:id="cbBLevel" disable="true" prefWidth="150.0">
+                    <items>
+                        <FXCollections fx:factory="observableArrayList">
+                            <String fx:value="Basics" />
+                            <String fx:value="Beginner" />
+                            <String fx:value="Intermediate" />
+                            <String fx:value="Advanced" />
+                            <String fx:value="PreBronze" />
+                            <String fx:value="Bronze" />
+                            <String fx:value="Silver" />
+                            <String fx:value="Gold" />
+                            <String fx:value="Novice" />
+                            <String fx:value="PreChamp" />
+                            <String fx:value="Championship" />
+                        </FXCollections>
+                    </items>
+                </ComboBox>
+                <ComboBox id="cbLLevel" fx:id="cbLLevel" disable="true" prefWidth="150.0">
+                    <items>
+                        <FXCollections fx:factory="observableArrayList">
+                            <String fx:value="Basics" />
+                            <String fx:value="Beginner" />
+                            <String fx:value="Intermediate" />
+                            <String fx:value="Advanced" />
+                            <String fx:value="PreBronze" />
+                            <String fx:value="Bronze" />
+                            <String fx:value="Silver" />
+                            <String fx:value="Gold" />
+                            <String fx:value="Novice" />
+                            <String fx:value="PreChamp" />
+                            <String fx:value="Championship" />
+                        </FXCollections>
+                    </items>
+                </ComboBox>
                 <CheckBox id="chbPaid" fx:id="chbPaid" disable="true" mnemonicParsing="false" />
                 <CheckBox id="chbCompetitive" fx:id="chbCompetitive" disable="true" mnemonicParsing="false" />
                 <TextField id="txtEmail" fx:id="txtEmail" disable="true" />

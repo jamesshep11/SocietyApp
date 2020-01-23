@@ -1,5 +1,6 @@
 import Members.Member;
 import Members.MembersList;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
@@ -8,10 +9,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.CheckBoxListCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -34,6 +37,7 @@ public class MemberDetails
     @FXML private Label lblMemberCount;
     @FXML private ListView<Member> lvMembers;
     @FXML private ImageView imgMember;
+    @FXML private MenuButton btnFilter;
     //endregion
 
     public MemberDetails() {
@@ -89,7 +93,7 @@ public class MemberDetails
 
         lvMembers.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
 
-            if (oldValue.isChanged())
+            if (oldValue!= null && oldValue.isChanged())
                 saveChanges(oldValue);
 
             if (oldValue != null){
@@ -185,6 +189,7 @@ public class MemberDetails
     public void btnLoadClicked(){
         membersList = new MembersList(lvMembers);
         try {
+            System.out.println("Loading...");
             btnLoad.setDisable(true);
             readMembersFromDB();
             //region Enable Components
@@ -206,15 +211,11 @@ public class MemberDetails
 
             txtSearch.setDisable(false);
             btnSearch.setDisable(false);
+            btnFilter.setDisable(false);
 
             cbGender.setDisable(false);
-            ObservableList<String> genders = FXCollections.observableArrayList("Male","Female");
-            cbGender.setItems(genders);
             cbBLevel.setDisable(false);
             cbLLevel.setDisable(false);
-            ObservableList<String> levels = FXCollections.observableArrayList("Basics","Beginner", "Intermediate", "Advanced", "PreBronze", "Bronze", "Silver", "Gold", "Novice", "PreChamp", "Champ");
-            cbBLevel.setItems(levels);
-            cbLLevel.setItems(levels);
 
             chbStudent.setDisable(false);
             chbPaid.setDisable(false);
@@ -330,6 +331,41 @@ public class MemberDetails
 
         stage.close();
         new Menu().load(db);
+    }
+
+    //region Filter UI Components
+    @FXML CheckBox chbFilterID, chbFilterName, chbFilterSurname, chbFilterGender, chbFilterStudent, chbFilterStudentNumber, chbFilterBLevel, chbFilterLLevel;
+    @FXML CheckBox chbFilterPaid, chbFilterCompetitive, chbFilterEmail, chbFilterPhone, chbFilterStreet, chbFilterSuburb, chbFilterDiet, chbFilterMedical, chbFilterDisabilities;
+    @FXML TextField txtFilterID, txtFilterName, txtFilterSurname, txtFilterStudentNumber, txtFilterEmail, txtFilterPhone, txtFilterStreet, txtFilterSuburb, txtFilterDiet, txtFilterMedical, txtFilterDisabilities;
+    @FXML ComboBox<String> cbFilterGender, cbFilterBLevel, cbFilterLLevel;
+    @FXML RadioButton rbFilterStudent, rbFilterPaid, rbFilterCompetitive;
+    //endregion
+    public void btnFilterClicked(){
+        String id , name, surname, gender, studentNumber, bLevel, lLevel, email, phone, street, suburb, diet, medical, disabilities;
+        Boolean student, paid, competitive;
+        id = name = surname = gender = studentNumber = bLevel = lLevel = email = phone = street = suburb = diet = medical = disabilities = null;
+        student = paid = competitive = null;
+
+
+        if (chbFilterID.isSelected()) id = txtFilterID.getText();
+        if (chbFilterName.isSelected()) name = txtFilterName.getText();
+        if (chbFilterSurname.isSelected()) surname = txtFilterSurname.getText();
+        if (chbFilterGender.isSelected()) gender = cbFilterGender.getValue();
+        if (chbFilterStudent.isSelected()) student = rbFilterStudent.isSelected();
+        if (chbFilterStudentNumber.isSelected()) studentNumber = txtFilterStudentNumber.getText();
+        if (chbFilterBLevel.isSelected()) bLevel = cbFilterBLevel.getValue();
+        if (chbFilterLLevel.isSelected()) lLevel = cbFilterLLevel.getValue();
+        if (chbFilterPaid.isSelected()) paid = rbFilterPaid.isSelected();
+        if (chbFilterCompetitive.isSelected()) competitive = rbFilterCompetitive.isSelected();
+        if (chbFilterEmail.isSelected()) email = txtFilterEmail.getText();
+        if (chbFilterPhone.isSelected()) phone = txtFilterPhone.getText();
+        if (chbFilterStreet.isSelected()) street = txtFilterStreet.getText();
+        if (chbFilterSuburb.isSelected()) suburb = txtFilterSuburb.getText();
+        if (chbFilterDiet.isSelected()) diet = txtFilterDiet.getText();
+        if (chbFilterMedical.isSelected()) medical = txtFilterMedical.getText();
+        if (chbFilterDisabilities.isSelected()) disabilities = txtFilterDisabilities.getText();
+
+        membersList.filter(id , name, surname, gender, student, studentNumber, bLevel, lLevel, paid, competitive, email, phone, street, suburb, diet, medical, disabilities);
     }
 
     //endregion
