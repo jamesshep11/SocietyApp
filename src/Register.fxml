@@ -3,17 +3,21 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="225.0" prefWidth="455.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Register">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="379.0" prefWidth="455.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Register">
    <children>
-      <Button fx:id="btnAttendance" layoutX="71.0" layoutY="143.0" mnemonicParsing="false" onAction="#btnMarkAttendanceClicked" text="Mark Attendance" textAlignment="CENTER" wrapText="true" />
-      <Button fx:id="btnUnAttendance" layoutX="239.0" layoutY="143.0" mnemonicParsing="false" onAction="#btnUnMarkAttendanceClicked" text="Unmark Attendance" wrapText="true" />
+      <Button fx:id="btnAttendance" layoutX="239.0" layoutY="123.0" mnemonicParsing="false" onAction="#btnMarkAttendanceClicked" text="Mark Attendance" textAlignment="CENTER" wrapText="true" />
+      <Button fx:id="btnUnAttendance" layoutX="239.0" layoutY="156.0" mnemonicParsing="false" onAction="#btnUnMarkAttendanceClicked" text="Unmark Attendance" wrapText="true" />
       <Button fx:id="btnAddEvent" layoutX="385.0" layoutY="89.0" mnemonicParsing="false" onAction="#btnAddEventClicked" text="+" />
       <Button fx:id="btnBack" layoutX="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#btnBackClicked" text="&lt;  Back" />
       <Label layoutX="71.0" layoutY="68.0" text="Member" />
-      <ComboBox id="chbMembers" fx:id="chbMembers" editable="true" layoutX="50.0" layoutY="89.0" prefWidth="150.0" />
       <ComboBox id="chbEvents" fx:id="chbEvents" editable="true" layoutX="225.0" layoutY="89.0" prefWidth="150.0" />
       <Label layoutX="239.0" layoutY="68.0" text="Event" />
+      <ListView id="lvMembers" fx:id="lvMembers" layoutX="10.0" layoutY="48.0" prefHeight="289.0" prefWidth="150.0" />
+      <TextField id="txtSearch" fx:id="txtSearch" layoutX="11.0" layoutY="340.0" prefHeight="25.0" prefWidth="110.0" />
+      <Button id="btnSearch" fx:id="btnSearch" layoutX="134.0" layoutY="340.0" mnemonicParsing="false" onAction="#btnSearchClicked" text="Search" />
    </children>
 </AnchorPane>

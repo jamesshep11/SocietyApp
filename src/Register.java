@@ -1,12 +1,13 @@
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.ComboBox;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.CheckBoxListCell;
 import javafx.stage.Stage;
 
 import javax.swing.*;
@@ -14,15 +15,19 @@ import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
 public class Register
 {
-    @FXML ComboBox<String> chbMembers, chbEvents;
+    @FXML ComboBox<String> chbEvents;
+    @FXML TextField txtSearch;
     @FXML Button btnAttendance, btnUnAttendance, btnAddEvent;
+    @FXML ListView<Member> lvMembers;
 
     private static ArrayList<Member> membersList = new ArrayList<>();
+    private static ObservableList<Member> observableMembers = FXCollections.observableArrayList(membersList);
     private static DatabaseConnection db;
     private static Stage stage;
 
@@ -58,29 +63,50 @@ public class Register
     }
 
     public void btnMarkAttendanceClicked(){
-        String memberName = chbMembers.getSelectionModel().getSelectedItem();
-        String eventName = chbEvents.getSelectionModel().getSelectedItem();
+        ObservableList<Member> selectedMembers = lvMembers.getItems().filtered(Member::isSelected);
 
-        if(memberName != null && eventName != null){
-            String memberID = find(memberName).getId();
-            String sql = String.format("UPDATE Register SET %s = true WHERE MemberID = '%s'", eventName, memberID);
-            db.runSQL(sql);
+        String eventName = chbEvents.getSelectionModel().getSelectedItem();
+        for(Member member : selectedMembers) {
+            String memberName = member.toString();
+
+            if (eventName != null) {
+                String memberID = find(memberName).getId();
+                String sql = String.format("UPDATE Register SET %s = true WHERE MemberID = '%s'", eventName, memberID);
+                db.runSQL(sql);
+            }
         }
 
-        System.out.println("Attendance marked: "+ memberName + " at " + eventName);
+        System.out.println("Attendance marked");
     }
 
     public void btnUnMarkAttendanceClicked(){
-        String memberName = chbMembers.getSelectionModel().getSelectedItem();
-        String eventName = chbEvents.getSelectionModel().getSelectedItem();
+        ObservableList<Member> selectedMembers = lvMembers.getItems().filtered(Member::isSelected);
 
-        if(memberName != null && eventName != null){
-            String memberID = find(memberName).getId();
-            String sql = String.format("UPDATE Register SET %s = false WHERE MemberID = '%s'", eventName, memberID);
-            db.runSQL(sql);
+        String eventName = chbEvents.getSelectionModel().getSelectedItem();
+        for(Member member : selectedMembers) {
+            String memberName = member.toString();
+
+            if (eventName != null) {
+                String memberID = find(memberName).getId();
+                String sql = String.format("UPDATE Register SET %s = false WHERE MemberID = '%s'", eventName, memberID);
+                db.runSQL(sql);
+            }
         }
 
-        System.out.println("Attendance unmarked: "+ memberName + " not at " + eventName);
+        System.out.println("Attendance unmarked.");
+    }
+
+    public void btnSearchClicked(){
+        String name = txtSearch.getText();
+
+        for (Member member : observableMembers)
+            if (member.toString().toUpperCase().contains(name.toUpperCase())) {
+                lvMembers.getSelectionModel().select(member);
+                lvMembers.scrollTo(member);
+                return;
+            }
+
+        System.out.println("Not Found");
     }
 
     //endregion
@@ -112,13 +138,14 @@ public class Register
         Member member;
         while (rs.next()) {
             member = new Member(rs.getString("ID"), rs.getString("Name"), rs.getString("Surname"));
-            membersList.add(member);
+            observableMembers.add(member);
             memberNames.add(member.toString());
         }
 
-        ObservableList<String> observableList = FXCollections.observableList(memberNames).sorted();
-        chbMembers = (ComboBox) stage.getScene().lookup("#chbMembers");
-        chbMembers.setItems(observableList);
+        observableMembers.sort(Comparator.comparing(Member::getName));
+        ListView<Member> lvMembers = (ListView<Member>) stage.getScene().lookup("#lvMembers");
+        lvMembers.setItems(observableMembers);
+        lvMembers.setCellFactory(CheckBoxListCell.forListView(Member::selectedProperty));
         //endregion
 
         //region Events
@@ -130,7 +157,7 @@ public class Register
             if (!rs.getString("COLUMN_NAME").equals("MemberID"))
                 events.add(rs.getString("COLUMN_NAME"));
 
-        observableList = FXCollections.observableList(events).sorted();
+        ObservableList<String> observableList = FXCollections.observableList(events).sorted();
         chbEvents = (ComboBox) stage.getScene().lookup("#chbEvents");
         chbEvents.setItems(observableList);
         //endregion
@@ -139,6 +166,7 @@ public class Register
     private class Member
     {
         private String id, name, surname;
+        private BooleanProperty selected = new SimpleBooleanProperty();
 
         public Member(String id, String name, String surname) {
             this.name = name;
@@ -150,6 +178,26 @@ public class Register
             return id;
         }
 
+        public String getName()
+        {
+            return name;
+        }
+
+        public boolean isSelected()
+        {
+            return selected.get();
+        }
+
+        public BooleanProperty selectedProperty()
+        {
+            return selected;
+        }
+
+        public void setSelected(boolean selected)
+        {
+            this.selected.set(selected);
+        }
+
         @Override
         public String toString() {
             return name + " " + surname;
@@ -157,7 +205,7 @@ public class Register
     }
 
     private Member find(String name){
-        for (Member member : membersList)
+        for (Member member : observableMembers)
             if (member.toString().equals(name))
                 return member;
 
