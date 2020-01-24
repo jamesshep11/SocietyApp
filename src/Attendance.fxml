@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="440.0" prefWidth="499.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Attendance">
+   <children>
+      <ListView fx:id="lvSelect" layoutX="23.0" layoutY="74.0" prefHeight="255.0" prefWidth="183.0" />
+      <Button fx:id="btnMembers" layoutX="23.0" layoutY="46.0" mnemonicParsing="false" onAction="#btnMembersClicked" text="Members" />
+      <Button fx:id="btnOverview" layoutX="140.0" layoutY="46.0" mnemonicParsing="false" text="Overview" />
+      <Button fx:id="btnEvents" layoutX="89.0" layoutY="46.0" mnemonicParsing="false" onAction="#btnEventsClicked" text="Events" />
+      <Button fx:id="btnBack" layoutX="14.0" layoutY="9.0" mnemonicParsing="false" onAction="#btnBackClicked" text="&lt;  Back" />
+      <Separator layoutX="234.0" layoutY="9.0" orientation="VERTICAL" prefHeight="422.0" prefWidth="6.0" />
+      <AnchorPane fx:id="apDetails" layoutX="245.0" layoutY="60.0" prefHeight="363.0" prefWidth="235.0">
+         <children>
+            <ListView fx:id="lvFiltered" layoutX="18.0" layoutY="14.0" prefHeight="255.0" prefWidth="200.0" />
+            <Label fx:id="lblPercentage" layoutX="144.0" layoutY="276.0" text="\% Attendance" />
+            <Label fx:id="lblCount" layoutX="18.0" layoutY="276.0" text="0 of 0" />
+            <Button fx:id="btnMarkAttendance" layoutX="110.0" layoutY="305.0" mnemonicParsing="false" onAction="#btnMarkAttendanceClicked" text="Mark Attendance" />
+            <Button fx:id="btnGraph" layoutX="18.0" layoutY="305.0" mnemonicParsing="false" text="Graph" />
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="apOverview" layoutX="245.0" layoutY="60.0" prefHeight="363.0" prefWidth="235.0" visible="false">
+         <children>
+            <Button layoutX="74.0" layoutY="115.0" mnemonicParsing="false" text="Button" />
+         </children>
+      </AnchorPane>
+      <TextField id="txtSearch" fx:id="txtSearch" layoutX="23.0" layoutY="338.0" prefHeight="25.0" prefWidth="110.0" />
+      <Button id="btnSearch" fx:id="btnSearch" layoutX="154.0" layoutY="338.0" mnemonicParsing="false" onAction="#btnSearchClicked" text="Search" />
+   </children>
+</AnchorPane>

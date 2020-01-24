@@ -8,6 +8,7 @@
    <children>
       <Button mnemonicParsing="false" onAction="#btnMemberDetailsClicked" text="Member Details" />
       <Button mnemonicParsing="false" onAction="#btnRegisterClicked" text="Register" />
+      <Button mnemonicParsing="false" onAction="#btnAttendanceClicked" text="Attendance" />
       <Button mnemonicParsing="false" onAction="#btnLogOutClicked" text="Log out" />
    </children>
    <opaqueInsets>

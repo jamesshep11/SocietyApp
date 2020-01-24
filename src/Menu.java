@@ -37,6 +37,11 @@ public class Menu
         new Register().load(db);
     }
 
+    public void btnAttendanceClicked() throws IOException, SQLException {
+        stage.close();
+        new Attendance().load(db);
+    }
+
     public void btnLogOutClicked() throws IOException {
         stage.close();
         new Login().load(db);
