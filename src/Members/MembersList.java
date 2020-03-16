@@ -56,7 +56,7 @@ public class MembersList
     //endregion
 
     public void goToFirst() {
-        System.out.println("|<\tFirst Members.Member.");
+        System.out.println("|<\tFirst Member.");
 
         lvMembers.getSelectionModel().selectFirst();
         lvMembers.scrollTo(0);
