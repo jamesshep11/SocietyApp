@@ -25,7 +25,7 @@ public class AddMember
     //endregion
 
     private static Stage stage;
-    private static Member newMember = null;
+    private static Member newMember;
     private static DatabaseConnection db;
 
     public AddMember() {
@@ -33,6 +33,7 @@ public class AddMember
 
     public void load(Stage parent){
         db = new DatabaseConnection();
+        newMember = null;
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("AddMember.fxml"));
         Parent root = null;
@@ -96,7 +97,7 @@ public class AddMember
         newMember = new Member(id, name, surname, gender, student, studentNumber, email, phone, street, suburb, bLevel, lLevel, paid, competitive, diet, medical, disabilities, image);
 
         db.close();
-        stage.hide();
+        stage.close();
     }
 
     public Member getNewMember(){

@@ -201,6 +201,9 @@ public class Register
         @Override
         public boolean equals(Object obj)
         {
+            if (obj == null)
+                return false;
+
             return ((Member)obj).id.equals(this.id);
         }
 
