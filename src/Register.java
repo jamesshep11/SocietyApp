@@ -134,12 +134,12 @@ public class Register
         String sql = "SELECT ID, Name, Surname FROM Members";
         ResultSet rs = db.runSQL(sql);
 
-        ArrayList<String> memberNames = new ArrayList<>();
+
         Member member;
         while (rs.next()) {
             member = new Member(rs.getString("ID"), rs.getString("Name"), rs.getString("Surname"));
-            observableMembers.add(member);
-            memberNames.add(member.toString());
+            if (!observableMembers.contains(member))
+                observableMembers.add(member);
         }
 
         observableMembers.sort(Comparator.comparing(Member::getName));
@@ -196,6 +196,12 @@ public class Register
         public void setSelected(boolean selected)
         {
             this.selected.set(selected);
+        }
+
+        @Override
+        public boolean equals(Object obj)
+        {
+            return ((Member)obj).id.equals(this.id);
         }
 
         @Override
