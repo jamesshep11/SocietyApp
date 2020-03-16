@@ -1,21 +1,12 @@
-import Members.Member;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.chart.LineChart;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.CheckBoxListCell;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
-import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -28,8 +19,7 @@ public class Attendance
     @FXML Button btnBack, btnMembers, btnEvents, btnOverview, btnGraph, btnMarkAttendance, btnSearch;
     @FXML TextField txtSearch;
     @FXML Label lblCount, lblPercentage;
-    @FXML ListView lvSelect, lvFiltered;
-    @FXML AnchorPane apDetails, apOverview;
+    @FXML ListView lvMembers, lvEvents;
     //endregion
 
     private static ArrayList<Member> membersList = new ArrayList<>();
@@ -67,47 +57,25 @@ public class Attendance
     }
 
     public void btnMembersClicked(){
-        observableMembers = FXCollections.observableArrayList(membersList);
-        lvSelect.setItems(observableMembers);
-        lvSelect.getSelectionModel().selectedItemProperty().removeListener((observable, oldValue, newValue) -> {
-            try {
-                filterMembers((String)newValue);
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        });
-        lvSelect.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            try {
-                filterEvents((Member)newValue);
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        });
-        lvSelect.getSelectionModel().selectFirst();
-        lvFiltered.setItems(observableEvents);
+        lvMembers.setItems(observableMembers);
+        lvEvents.setItems(FXCollections.observableArrayList(new ArrayList()));
+
+        lvMembers.setLayoutX(23);
+        lvMembers.setDisable(false);
+        lvEvents.setLayoutX(265);
+        lvEvents.setDisable(true);
 
         state = "Members";
     }
 
     public void btnEventsClicked(){
-        observableEvents = FXCollections.observableArrayList(eventsList);
-        lvSelect.setItems(observableEvents);
-        lvSelect.getSelectionModel().selectedItemProperty().removeListener((observable, oldValue, newValue) -> {
-            try {
-                filterEvents((Member)newValue);
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        });
-        lvSelect.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            try {
-                filterMembers((String)newValue);
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        });
-        lvSelect.getSelectionModel().selectFirst();
-        lvFiltered.setItems(observableMembers);
+        lvEvents.setItems(observableEvents);
+        lvMembers.setItems(FXCollections.observableArrayList(new ArrayList()));
+
+        lvEvents.setLayoutX(23);
+        lvEvents.setDisable(false);
+        lvMembers.setLayoutX(265);
+        lvMembers.setDisable(true);
 
         state = "Events";
     }
@@ -123,16 +91,16 @@ public class Attendance
             case "Members":
                     for (Member member : observableMembers)
                         if (member.toString().toUpperCase().contains(name.toUpperCase())) {
-                            lvSelect.getSelectionModel().select(member);
-                            lvSelect.scrollTo(member);
+                            lvMembers.getSelectionModel().select(member);
+                            lvMembers.scrollTo(member);
                             return;
                         }
                 break;
             case "Events":
                 for (String event : observableEvents)
                     if (event.toUpperCase().contains(name.toUpperCase())) {
-                        lvSelect.getSelectionModel().select(event);
-                        lvSelect.scrollTo(event);
+                        lvEvents.getSelectionModel().select(event);
+                        lvEvents.scrollTo(event);
                         return;
                     }
                 break;
@@ -151,10 +119,20 @@ public class Attendance
         Member member;
         while (rs.next()) {
             member = new Member(rs.getString("ID"), rs.getString("Name"), rs.getString("Surname"));
-            membersList.add(member);
+            if (!observableMembers.contains(member))
+                observableMembers.add(member);
         }
+        observableMembers.sort(Comparator.comparing(Member::getName));
 
-        membersList.sort(Comparator.comparing(Member::getName));
+        lvMembers = (ListView) stage.getScene().lookup("#lvMembers");
+        lvMembers.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            try {
+                if (newValue != null)
+                    filterEvents((Member)newValue);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
         //endregion
 
         //region Events
@@ -162,11 +140,20 @@ public class Attendance
         rs = db.runSQL(sql);
 
         while (rs.next()) {
-            if (!rs.getString("COLUMN_NAME").equals("MemberID"))
-                eventsList.add(rs.getString("COLUMN_NAME"));
+            if (!rs.getString("COLUMN_NAME").equals("MemberID") && !observableEvents.contains(rs.getString("COLUMN_NAME")))
+                observableEvents.add(rs.getString("COLUMN_NAME"));
         }
+        observableEvents.sort(Comparator.comparing(String::toString));
 
-        eventsList.sort(Comparator.comparing(String::toString));
+        lvEvents = (ListView) stage.getScene().lookup("#lvEvents");
+        lvEvents.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            try {
+                if (newValue != null)
+                    filterMembers((String)newValue);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
         //endregion
     }
 
@@ -177,11 +164,11 @@ public class Attendance
         if(!rs.next()) return;
 
         ArrayList<String> filteredEvents = new ArrayList<>();
-        for (String event : eventsList)
+        for (String event : observableEvents)
             if (rs.getBoolean(event))
                 filteredEvents.add(event);
 
-        observableEvents = FXCollections.observableArrayList(filteredEvents);
+        lvEvents.setItems(FXCollections.observableArrayList(filteredEvents));
     }
 
     private void filterMembers(String event) throws SQLException {
@@ -195,7 +182,7 @@ public class Attendance
             filteredMembers.add(member);
         }
 
-        observableMembers = FXCollections.observableArrayList(filteredMembers);
+        lvMembers.setItems(FXCollections.observableArrayList(filteredMembers));
     }
 
     private class Member
@@ -215,6 +202,15 @@ public class Attendance
         public String getName()
         {
             return name;
+        }
+
+        @Override
+        public boolean equals(Object obj)
+        {
+            if (obj == null)
+                return false;
+
+            return ((Member)obj).id.equals(this.id);
         }
 
         @Override
