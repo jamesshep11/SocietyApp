@@ -16,8 +16,8 @@
       <Button fx:id="btnBack" layoutX="14.0" layoutY="9.0" mnemonicParsing="false" onAction="#btnBackClicked" text="&lt;  Back" />
       <Separator layoutX="239.0" layoutY="9.0" orientation="VERTICAL" prefHeight="422.0" prefWidth="6.0" />
       <ListView fx:id="lvEvents" layoutX="265.0" layoutY="75.0" prefHeight="255.0" prefWidth="190.0" />
-      <Label fx:id="lblPercentage" layoutX="380.0" layoutY="330.0" text="\% Attendance" />
-      <Label fx:id="lblCount" layoutX="270.0" layoutY="330.0" text="0 of 0" />
+      <Label fx:id="lblPercentage" layoutX="380.0" layoutY="330.0" text="\% Attendance" visible="false" AnchorPane.rightAnchor="35.0" />
+      <Label fx:id="lblCount" layoutX="270.0" layoutY="330.0" text="0 of 0" visible="false" />
       <Button fx:id="btnMarkAttendance" layoutX="348.0" layoutY="355.0" mnemonicParsing="false" onAction="#btnMarkAttendanceClicked" text="Mark Attendance" />
       <Button fx:id="btnGraph" layoutX="265.0" layoutY="355.0" mnemonicParsing="false" text="Graph" />
       <TextField id="txtSearch" fx:id="txtSearch" layoutX="23.0" layoutY="338.0" prefHeight="25.0" prefWidth="110.0" />

@@ -65,6 +65,9 @@ public class Attendance
         lvEvents.setLayoutX(265);
         lvEvents.setDisable(true);
 
+        lblCount.setVisible(false);
+        lblPercentage.setVisible(false);
+
         state = "Members";
     }
 
@@ -77,11 +80,15 @@ public class Attendance
         lvMembers.setLayoutX(265);
         lvMembers.setDisable(true);
 
+        lblCount.setVisible(false);
+        lblPercentage.setVisible(false);
+
         state = "Events";
     }
 
     public void btnMarkAttendanceClicked() throws IOException, SQLException {
         new Register().load(db);
+        stage.close();
     }
 
     public void btnSearchClicked(){
@@ -169,6 +176,13 @@ public class Attendance
                 filteredEvents.add(event);
 
         lvEvents.setItems(FXCollections.observableArrayList(filteredEvents));
+
+        lblCount = (Label) stage.getScene().lookup("#lblCount");
+        lblCount.setText(String.format("%s of %s", filteredEvents.size(), observableEvents.size()));
+        lblCount.setVisible(true);
+        lblPercentage = (Label) stage.getScene().lookup("#lblPercentage");
+        lblPercentage.setText(filteredEvents.size()/observableEvents.size()*100 + "% Attendance");
+        lblPercentage.setVisible(true);
     }
 
     private void filterMembers(String event) throws SQLException {
@@ -183,6 +197,10 @@ public class Attendance
         }
 
         lvMembers.setItems(FXCollections.observableArrayList(filteredMembers));
+
+        lblCount = (Label) stage.getScene().lookup("#lblCount");
+        lblCount.setText("Total: " + filteredMembers.size());
+        lblCount.setVisible(true);
     }
 
     private class Member
